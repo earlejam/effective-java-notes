@@ -156,16 +156,116 @@ Common names:
 # 4. Classes and Interfaces
 
 #### 15. Minimize the accessability of classes and members
+
+- Cleanly separate API from implementation (encapsulation)
+- Make each class or member as inaccessible as possible
+- Accessibility levels:
+  - private - accessible only from top-level class where it's declared
+  - package-private: accessible from any class in the package where it's declared
+  - protected: accessible from subclasses of the class and from any class in the package where it's declared
+  - public: accessible from anywhere
+- Instance fields of public classes should rarely be public; classes with public mutable fields are not generally thread-safe
+- It is _wrong_ for a class to have a public static final array field or an accessor that returns such a field
+
 #### 16. In public classes, use accessor methods, not public fields
+
+- If a class is accessible outside its package, provide accessor methods
+- If a class is package-private or is a private nested class, there is nothing inherently wrong with exposing its data fields
+
 #### 17. Minimize mutability
+
+- 5 rules to follow:
+  1. Don't provide mutators
+  2. Ensure the class can't be extended (make the class final)
+  3. Make all fields final
+  4. Make all fields private
+  5. Ensure exclusive access to any mutable components
+- Immutable objects are simple
+- Immutable objects are inherently thread safe and require no synchronization
+- Immutable objects can be shared freely: they never require defensive copies
+- You should never provide a clone method or a copy constructor for an immutable class
+- Not only can you share immutable objects, but they can share their internals
+- Immutable objects make great building blocks for other objects (especially good for map keys or sets)
+- Immutable objects provide failure atomicity for free
+- The major disadvantage of immutable classes is that they require a separate object for each distinct value (which can be costly, especially if objects are large)
+- Classes should be immutable unless there's a very good reason to make them mutable
+- If a class cannot be made immutable, limit its mutability as much as possible
+- Constructors should create fully initialized objects with all invariants established
+
 #### 18. Favor composition over inheritance
+
+- Inheritance is powerful for code reuse, but used inappropriately can lead to fragile code
+- Unlike method invocation, inheritance violates encapsulation
+- Superclass implementation details can change, breaking subclass
+- Superclass can acquire new methods in subsequent releases that subclasses don't know about
+- Solution: give your class a private field that references an instance of the existing class instead of extending it (_composition_)
+  - The resulting class will be rock-solid, with no dependencies on the implementation details of the existing class
+  - 'Forward' results of calling methods on the existing (private member) class
+- Composition also known as the "Decorator" pattern
+- Disadvantage of wrapper classes:
+  - Not suited for use in callback frameworks; callback elude wrapper (SELF problem)
+  - Tedious to write forwarding methods
+- If you use inheritance where composition is preferable, you needlessly expose implementation details
+
 #### 19. Design and document for inheritance or else prohibit it
+
+- The class must document its self-use of overrideable methods
+- A class may have to provide hooks into its internal workings in the form of judiciously chosen protected methods
+- The _only_ way to test a class designed for inheritance is to write subclasses (~3 sufficient)
+- You must test your class by writing subclasses _before_ you release it
+- Constructors must not invoke overrideable methods (leads to program failures)
+- Neither clone nor readObject may invoke an overrideable method directly or indirectly
+- The best solution is to prohibit subclassing in classes that are not designed and documented to be safely subclassed
+
 #### 20. Prefer interfaces to abstract classes
+
+- Existing classes can easily be retrofitted to implement a new interface
+- Interfaces are ideal for defining mixins
+  - mixin: type that a class can implement in addition to its "primary type" to declare that it provides some optional behavior (e.g. Comparable)
+- Interfaces allow for the construction of nonhierarchical type frameworks
+- Interfaces enable safe, powerful functionality enhancements via the wrapper class idiom
+- Can provide a "skeletal implementation class" to go with an interface
+  - The interface defines the type, and the skeletal implementation class implements the remaining non-private interface methods atop the primitive interface methods ("Template Method" pattern)
+  - Called "Abstract{InterfaceName}" by convention
+- Good documentation is absolutely essential in a skeletal implementation
+
 #### 21. Design interfaces for posterity
+
+- Adding new methods to existing interfaces is fraught with risk
+- It is not always possible to write a default method that maintains all invariants of every conceivable implementation (e.g. thread safety)
+- In the presence of default methods, existing implementations of an interface may compile without errors or warnings but fail at runtime
+- It is still of the utmost importance to design interfaces with great care; don't count on fixing flaws post-release
+
 #### 22. Use interfaces only to define types
+
+- The constant interface (anti)pattern is a poor use of interfaces
+- Misc: can use underscore in large numbers to make them more readable
+
 #### 23. Prefer class hierarchies to tagged classes
+
+- Tagged classes are cluttered with boilerplate, readability is harmed
+- Tagged classes have multiple implementations jumbled together into a single class
+- Tagged classes are verbose, error-prone, and inefficient
+- A tagged class is just a pallid imitation of a class hierarchy
+
 #### 24. Favor static member classes over nonstatic
+
+- Static member class: an ordinary class that happens to be declared inside another class
+- Common use: public helper class (e.g. Operation enum with calculator class)
+- Common use of non-static version: define an "Adapter" that allows an instance of the outer class to be viewed as an instance of some unrelated class
+- If you declare a member class that does not require access to an enclosing instance, _always_ make it static
+- Anonymous class: has no name, not a member of its enclosing class.
+  - They're permitted at any point an expression is legal
+  - Can't instantiate them except at point they're declared
+  - Can't use instanceof
+  - Can't implement multiple interfaces
+  - Must be kept short
+
 #### 25. Limit source files to a single top-level class
+
+- Multiple top-level classes in same file means it's possible to provide multiple definitions
+- Can change behavior based on the order files are passed to the compiler (!)
+- Never put multiple top-level classes or interfaces in a single source file
 
 # 5. Generics
 
