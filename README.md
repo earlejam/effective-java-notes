@@ -12,14 +12,87 @@ Disclaimer: All content is taken from the book and should credited to Joshua Blo
 # 2. Creating and Destroying Objects
 
 #### 1. Consider static factory methods
+
+Pros:
+- Named, unlike constructors
+- Not required to return a -new- object, which allows for instance controlling
+- Can return an object of any subtype of their return type
+- Class of returned object can vary from call to call as a function of the input parameters
+- Class of returned object need not exist when the class containing the method is written, which is the basis of Service Provider Frameworks
+
+Cons:
+- No public/protected constructor means no subclassing
+- Hard for programmers to find
+
+Common names:
+- from() - type conversion
+- of() - aggregation
+- valueOf() - more verbose
+- instance() or getInstance() - returns instance, but not the same value
+- create() or newInstance() - call returns new instance
+- getType() or newType() - if in different class
+- type() - more concise
+
 #### 2. Consider a builder when faced with many constructor parameters
+
+- Telescoping constructors pattern hard to read, doesn't scale well
+- JavaBeans pattern allows inconsistency, mandates mutability
+- Builder simulates named parameters from languages like Python
+- Well-suited to class hierarchies
+- Downside: have to create Builder objects
+
 #### 3. Enforce the singleton property with a private constructor or an enum type
+
+- A singleton is a class that is instantiated exactly once
+- Can make it difficult to test its clients
+- Best way to implement is with a single element enum
+
 #### 4. Enforce noninstantiability with a private constructor
+
+- E.g. a collection of methods (Math, Arrays)
+- Attempting to enforce noninstantiability by making a class abstract does not work
+- Solution: private constructor means no public method to create an instance
+
 #### 5. Prefer dependency injection to hardwiring resources
+
+- Static utility classes and singletons are inappropriate for classes whose behavior is parameterized by an underlying resource (e.g. dictionary for spellcheck program)
+- Dependency injection provides testability and flexibility
+
 #### 6. Avoid creating unnecessary objects
+
+- Objects can always be reused if they're immutable
+- Try static factory methods or static initializers (for mutable objects)
+- Prefer primitives to boxed primitives and watch out for unintentional autoboxing
+
 #### 7. Eliminate obsolete object references
-#### 8. Avoid finalizers and cleansers
+
+- Memory leaks ~ "unintentional object retentions"
+- Solution: null out references once they're obsolete
+- But: nulling out references should be the exception, not the norm
+- So: do this when you're "managing memory manually", e.g. a custom data structure like a queue where old elements may remain but the garbage collector doesn't know what is in use and not
+- Another source: caches & listeners and other callbacks
+
+#### 8. Avoid finalizers and cleaners
+
+- Finalizers are unpredictable, often dangerous, and generally unneccessary
+- Cleaners are less dangerous than finalizers, but are still unpredictable and generally unneccessary
+- Never do anything time-critical in a finalizer or cleaner
+- Never depend on a finalizer to update critical persistent state
+- There is a -severe- performance penalty for using finalizers
+- Instead, provide an explicit termination method (e.g. file.close())
+- Explicit termination methods are typically used in combination with the try-finally construct to ensure termination
+- Two valid uses of finalizers and cleaners:
+  - Can be used as a fail-safe if explicit termination method is forgotten by programmer
+  - Finalizer should log warning if it finds that the resource has not been terminated
+  - Objects with native peers
+  - Remember super.finalize()
+  - Finalizer Guardian with public nonfinal class
+- In sum, don't use either of these except as a safety net or to terminate noncritical native resources. Even then, beware indeterminancy and performance hits
+
 #### 9. Always use try-with-resources in preference to try-finally when working with resources that must be closed
+
+- Code shorter and cleaner, and better exceptions provided to programmer
+
 
 # 3. Methods Common to All Objects
 
