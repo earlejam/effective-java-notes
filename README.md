@@ -7,6 +7,7 @@ Disclaimer: All content is taken from the book and should credited to Joshua Blo
 - All details for items
 - Tables
 - Special formatting for code, method names, etc
+- Table of contents
 - Spell check
 
 # 2. Creating and Destroying Objects
@@ -97,10 +98,60 @@ Common names:
 # 3. Methods Common to All Objects
 
 #### 10. Obey the general contract when overriding equals
+
+- Don't override if:
+  - each instance is inherently unique
+  - no need for logical equality test
+  - superclass overrode equals and still applies
+  - certain that equals will never be invoked
+- Once you've violated the equals contract, you don't how how other objects will behave when confronted with yours
+- There is no way to extend an instantiable class and add a value component while preserving the equals contract
+- Workaround: favor composition over inheritance (e.g. give ColorPoints a private Point field and a public view method: asPoint())
+- But: can add a value component to a subclass of an abstract class without violating equals contract
+- Do NOT write an equals method that relies on unreliable resources (e.g. network access)
+- Recipe for a high-quality equals method:
+  1. Use == operator to check if argument is reference to this object
+  2. Use instanceof to check if argument has correct type
+  3. Cast argument to correct type (since it's an Object to start)
+  4. For each "significant" field in the class, check if the field in the argument matches the corresponding one in the object. Compare fields most likely to differ first, or the ones that are less expensive to compare
+  5. When done writing, check 1) symmetry, 2) transitive, 3) consistent
+- Always override hashcode when you override equals. Don't be too clever
+- Make sure param is Object type
+
 #### 11. Always override hashcode when you override equals
+
+- Equal objects must have equal hashcodes
+- Do not be tempted to exclude significant fields from the hashcode computation to improve performance
+- Don't provide a detailed specification of the value returned by hashcode, so clients can't depend on it and you can change it
+
 #### 12. Always override toString
+
+- Makes your class more pleasant to use and makes systems using the class easier to debug
+- When practical, toString should return _all_ the interesting info contained in the object
+- Whether or not you decide to specify a format (and corresponding static factory for converting back) you should clearly document your intentions
+- Provide programmatic access to the info contained in the value returned by toString (e.g. getters)
+
 #### 13. Override clone judiciously
+
+- Cloneable interface means protected clone method on Object returns field-by-field copy of the object
+- A class implementing Cloneable is expected to provide a properly functioning, public clone method
+- By convention, object should be obtained by calling super.clone(), not constructor
+- Immutable classes should never provide a clone method (wasteful copying)
+- Must ensure that the new object does no harm to the original object and properly establishes invariants on the clone
+- The Cloneable architecture is incompatible with normal use of final fields referring to mutable objects
+- Try a deepCopy method for objects with complex mutable state
+- A clone method must never invoke an overrideable method on the clone under construction
+- Public clone methods should omit the throws clause
+- A better approach to object copying is to provide a "copy constructor" or "copy factory" because 1) they don't conflict with proper use of final fields and 2) don't throw unnecessary checked exceptions, etc
+- New interfaces should not extend Cloneable
+- Arrays are better with clone, everything else is better with copy constructors or factories
+
 #### 14. Consider implementing Comparable
+
+- Should generally agree with equals
+- Use of < and > in compareTo methods is verbose, error-prone, and not reccommended
+- Start with the most significant fields
+- Do not use difference-based comparators
 
 # 4. Classes and Interfaces
 
