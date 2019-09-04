@@ -370,13 +370,65 @@ Common names:
 # 6. Enums and Annotations
 
 #### 34. Use enums instead of int constants
+
+- Int constants have no type safety, little expressiveness
+- Brittle because if the actual values change, must be re-compiled by clients
+- Enums are classes that export one instance for each enum constant via a public final static field
+- To associate data with enum constants, declare instance fields and write a constructor that takes the data and stores it in the fields
+- To associate different behaviors with each enum constant, declare an abstract method in the enum type, and override it with a concrete method for each constant in a "constant-specific class body".
+- Use the "Strategy enum" pattern to force each new enum constant that's added to provide an implementation for the strategy (e.g. Overtime pay)
+- Switches on enums are good for augmenting enum types with constant-specific behavior
+- Use enums anytime you need a set of constants whose members are known at compile-time
+- It is not necessary that the set of all constants in an enum type stay fixed for all time
+
 #### 35. Use instance fields instead of ordinals
+
+- Never derive a value associated with an enum from its ordinal; store it in an instance field instead
+
 #### 36. Use EnumSet instead of bit fields
+
+- Just because an enumerated type will be used in sets, there is no reason to represent it with bit fields
+
 #### 37. Use EnumMap instead of ordinal indexing
+
+- Most serious problem with ordinal indexing: your responsibility to use correct int value; ints do not provide the type safety of enums
+- Can use 3-parameter version of Collectors.groupingBy to specify EnumMap implementation if desired
+- It is rarely appropriate to use ordinals ito index into arrays; use EnumMap instead
+
 #### 38. Emulate extensible enums with interfaces
+
+- Would like to have extensible enums for opcodes
+- Emulate this by defining an interface for the opcode type and an enum that is the standard implementation of the interface
+- While you cannot write an extensible enum type, you can emulate it by writing an interface to accompany a basic enum type that implements the interface
+
 #### 39. Prefer annotations to naming patterns
+
+- Naming patterns:
+  - Typographical errors lead to silent failures
+  - No way to ensure they're used on appropriate program elements
+  - No good way to associate parameter values with program elements
+- Annotations solve these problems (@AnnotationName)
+- There is simply no reason to use naming patterns when you can add annotations instead
+- All programmers should use the predefined annotation types that Java provides
+
 #### 40. Consistently use the @Override annotation
+
+- Use the @Override annotation on every method declaration that you believe to override a superclass declaration
+- Not required to annotate methods that you believe to override abstract method declarations in concrete classes
+
 #### 41. Use marker interfaces to define types
+
+- Marker interface: no method declarations, merely designates or "marks" a class that implements the interface as having some property (e.g. Serializable)
+- Marker interfaces _define a type_ that is implemented by instances of the marked class; marker annotations do not
+- Marker ineterfaces can be targeted more precisely
+- The Set interface is arguable just a restricted marker interface
+- The chief advantage of marker annotations over marker interfces is that they're part of the larger annotations facility
+- How to decide between the two:
+  - If it's not a class or interface, choose the annotation
+  - If class or interface: "Might I want to write 1+ methods that accept objects only having this marking?"
+    - If so, use a marker interface
+- If you find yourself writing a marker annotation type whose target is ElementType TYPE, take the time to figure out whether it really should be an annotation type or marker interface
+
 
 # 7. Lambdas and Streams
 
