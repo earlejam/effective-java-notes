@@ -834,12 +834,91 @@ Common names:
 # 11. Concurrency
 
 #### 78. Synchronize access to shared mutable data
+
+- The synchronized keyword ensures only a single thread can execute a method or block at a time
+- Synchronization is required for reliable communication between threads as well as for mutual exclusion
+- Do not use Thread.stop()
+- More common pattern: have thread set a boolean field to true, with other (stopper) thread polling the boolean
+- Beware of _hoisting_ and the resulting liveness failures (while loop changed to if through compiler optimizations)
+- Synchronization is not guaranteed to work unless _both_ read and write operations are synchronized
+- Declaring a field as 'volatile' is a strategy that performs no mutual exclusion, but guarantees that any thread that reads the field will see the most recently written value
+- Try using data types like AtomicLong from java.util.concurrent.atomic
+- Confine mutable data to a single thread
+- When multiple threads share mutable data, each thread that reads or writes the data must perform synchronization
+
 #### 79. Avoid excessive synchronization
+
+- Depending on the situation, excessive synchronization can cause reduced performace, deadlock, or even nondeterministic behavior
+- To avoid liveness and safety failures, never cede control to the client within a synchronized method or block, including "alien" methods
+- Multi-catch clauses for exceptions can greatly increase the clarity and reduce the size of programs that behave identically in response to different exception types
+- Java uses _reentrant_ locks; they can simplify the construction of multithreaded object-oriented programs, but they can turn liveness failures into safety failures
+- Try concurrent collections liek CopyOnWriteArrayList
+- An alien method invoked outside of a synchronized region is known as an _open call_; besides preventing failures, open calls can greatly increase concurrency
+- As a rule, you should do as little work as possible inside synchronized regions
+- In a multicore world, the real cost of excessive synchronization is not the CPU time spent getting locks; it is contention: the lost opportunities for parallelism and the delays imposed by the need to ensure taht every core has a consistent view of memory
+- If you're writing a mutable class, you have two options: you can omit all synchronization and allow the client to synchronize externally if concurrent use is desired, or you can synchronize internally, making the class _thread safe_
+- You should choose #2 only if you can achieve significantly higher concurrency with internal synchronization versus external
+- If a method modifies a static field and there is any possibility that the method will be called from multiple threads, you _must_ synchronize access to the field internally because it is not possible for the client to do this correctly externally
+- Document your decision to make your class thread-safe or not clearly
+
 #### 80. Prefer executors, tasks, and streams to threads
+
+- An _Executor Framework_ is a flexible interface-based task execution facility
+- If you want more than one thread to process requests, simply call a different kind of executor service called a _thread pool_
+- For a small program or lightly loaded server, Executors.newCachedThreadPool is generally a good choice because it demands no configuration and generally "does the right thing"
+- But, a cached thread pool is not a good choice for a heavily loaded production server! (try using Executors.newFixedThreadPool instead)
+- Avoid working directly with Threads because the unit of work and mechanism are the same (Thread); executor framework separates the two allowing for policy changes
+- _Task_ is the abstraction for a unit of work: Runnable and Callable versions (Callable is like Runnable but returns a value & can throw exceptions)
+- Parallel streams are written atop fork-join pools, allowing for the parallelism for little effort, assuming the task is appropriate
+
 #### 81. Prefer concurrency utilities to wait and notify
+
+- Given the difficulty of using wait and notify correctly, you should use higher-level concurrency utilities instead
+- The concurrent collections are high-performance concurrent implementations of standard collection interface (List, Queue, Map, etc.)
+- It is impossible to exclude concurrent activity from a concurrent collection; locking it will only slow the program
+- _Canonicalization_ - process of converting data that involves more than representation into a standard approved format
+- Use ConcurrentHashMap in preference to Collections.SynchronizedMap
+- BlockingQueue can be used as a work queue
+- Synchronizers are objects that enable threads to wait for one another, allowing them to coordinate their activities
+  - E.g. CountDownLatch, Semaphore, Phaser, etc.
+- Countdown latches are single-use barriers that allow one or more threads to wait for 1+ threads to do something
+- For internal timing, always use System.nanoTime rather than System.currentTimeMillis
+- The wait method is used to make a thread wait for some condition, and must be invoked inside a synchronized region that locks the object on which it is invoked
+- Always use the wait loop idiom to invoke the wait method; never invoke it outiside of a loop
+- The advice to use notifyall rather than notify is reasonable and conservative
+- There is seldom, if ever, a reason to use wait and notify in new code
+
 #### 82. Document thread safety
+
+- The presence of the synchronized modifier in a method declaration is an implementation detail, not part of its API; it does not reliably indicate if a method is thread-safe
+- To enable safe concurrent use, a class must clearly document what level of thread safety it supports:
+  - Immutable: No external synchronization necessary (String, Long, BigInteger)
+  - Unconditionally thread-safe: No need for any external synchronization even though it's mutable (AtomicLong, ConcurrentHashMap)
+  - Conditionally thread-safe: Some methods require external synchronization (Collections.synchronized collections)
+  - Not thread-safe: Instances are mutable, clients must surround each method invocation with external synchronization (ArrayList, HashMap)
+  - Thread-hostile: Unsafe for concurrent use even if every method invocation is surrounded by external synchronization. Usually from modifying static data without synchronization.
+    - Such classes are typically fixed or deprecated
+- Publicly accessible locks are vulnerable to Denial of Service (DoS) attacks because a client can intentionally or unintentionally hold the lock for a prolonged period
+- To prevent this, use a private lock object instead of using synchronized methods
+- Lock fields should _always_ be final
+
 #### 83. Use lazy initialization judiciously
+
+- Under most circumstances, normal initialization is preferable to lazy initialization
+- If you use lazy initialization to break an initialization circularity, use a synchronized accessor
+- If you need to use lazy initialization for performance on a static field, use the _lazy initialization holder class_ idiom
+- If you need to use lazy initialization for performance on an instance field, use the _double-check_ idiom
+
 #### 84. Don't depend on the thread scheduler
+
+- Any program that relies on the thread scheduler for correctness or performance is likely to be nonportable
+- The best way to write a robust, responsive, portable program is to ensure the number of runnable threads is not significantly greater than the number of processors
+- Threads should not run if they aren't doing useful work
+- Size thread pools appropriately and keep tasks short, but not _too_ short
+- Resist the temptation to "fix" a program by putting in calls to Thread.yield
+- Thread.yield has no testable semantics
+- Thread priorities are among the least portable features of Java, and should only be used to tweak performance on a system, not to "fix" a program that has liveness issues
+
 
 # 12. Serialization
 
