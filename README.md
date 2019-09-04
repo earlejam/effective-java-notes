@@ -636,17 +636,122 @@ Common names:
 # 9. General Programming
 
 #### 57. Minimize the scope of local variables
+
+- Increases the readability and maintainability of the code, reduces likelihood for error
+- The most powerful technique for minimizing the scope of a local variable is to declare it where it is first used
+- Nearly every local variable declaration should contain an initializer
+- Prefer for-loops to while-loops
+- Keep methods small and focused
+
 #### 58. Prefer for-each loops to traditional for-loops
+
+- 3 common situations where you cant use for-each:
+  1. Destructive filtering: use iterator & its remove method instead
+  2. Transforming: use list iterator or array index instead
+  3. Parallel iteration: use iterator or array index variable instead
+- For-each loop provides compelling advantages over traditional for-loop in clarity, flexibility, and bug prevention, with no performance penalty
+
 #### 59. Know and use the libraries
+
+- By using a standard library, you take advantage of the knowledge of the experts who wrote it and the experience of those who used it before you
+- The random number generator ThreadLocalRandom is now the top choice
+- Numerous features are added to libraries in every major release, and it pays to keep abreast of these additions
+- Every programmer should be familiar with the basics of java.lang, java.util, and java.io, and their subpackages; the others can be learned on a need-to-know basis
+
 #### 60. Avoid float and double if exact answers are required
+
+- The float and double types are particularly ill-suited for monetary calculations
+- Instead, use BigDecimal, int, or long for monetary calculations
+- BigDecimal less convenient than using primitive, and a lot slower
+
 #### 61. Prefer primitive types to boxed primitives
+
+- Applying the == operator to boxed primitives is almost always wrong
+- When you mix primitives and boxed primitives in an operation, the boxed primitive is auto-unboxed
+- Use boxed primitives as elements, keys, and values in collections, and for types in parameterized types or methods
+- Boxed primitives should be used for reflective method invocations
+- Autoboxing reduces verbosity, but not the danger of using boxed primitives; (auto) unboxing can cause a NullPointerException
+
 #### 62. Avoid strings where other types are more appropriate
+
+- Strings are poor substitutes for other value types
+- Strings are poor replacements for enum types
+- Strings are poor substitutes for aggregate types
+- Strings are poor substitutes for capabilities
+- Used inappropriately, strings are more cumbersome, less flexible, slower and more error-prone than other types
+
 #### 63. Beware the performance of string concatenation
+
+- Using the string concatenation operator repeatedly to concatenate n strings requres time quadratic in n
+- To achieve acceptable performance, use a StringBuilder in place of a String
+- Don't use the string concatenation operator to combine more than a few strings
+
 #### 64. Refer to objects by their interfaces
+
+- If appropriate interfaces exist, then parameters, return values, variables, and fields should all be declared using interface types
+- If you get in the habit of using interfaces as types, your program will be much more flexible
+- It is entirely appropriate to refer to an object by a class rather than an interface if no appropriate interface exists
+  - E.g. value classes, objects belonging to a framework, and classes that implement an interface but also provide extra methods not found in the interface
+- If there is no appropriate interface, just use the least-specific class in the class hierarchy that provides the required functionality
+
 #### 65. Prefer interfaces to reflection
+
+- The _core reflection facility_ offers programmatic access to arbitrary classes
+- Given a Class object, you can obtain Constructor, Method, and Field instances representing the actual entities of the class
+- These let you manipulate their underlying counterparts reflectively: you can construct instances, invoke methods, and access fields of the underlying class
+- Reflection allows one class to use another, even if the latter class didn't exist when the former was compiled
+- Price of reflection:
+  1. You lose all the benefits of compile-time type checking, including exception checking
+  2. The code required to perform reflective access is clumsy and verbose
+  3. Performance suffers
+- You can obtain many of the benefits of reflection while incurring few of its costs by using it only in a very limited form
+- Create instances reflectively and access them normally via their interface or superclass
+- A legitimate, if rare, use of reflection is to manage a class's dependencies on other classes, methods, or fields that may be absent at runtime
+
 #### 66. Use native methods judiciously
+
+- The Java Native Interface (JNI) allows Java programs to call _native_ methods, which are methods written in _native programming languages_ such as C or C++.
+- Uses:
+  1. Provide access to platform-specific facilities such as registries
+  2. Provide access to existing libraries of native code & legacy libraries & legacy data
+  3. Write performance-critical parts of applications in native languages for improved performance
+- It is rarely advisable to use native methods for improved performance
+- Serious disadvantages:
+  1. Native languages are not safe
+  2. Programs are less portable
+  3. Harder to debug
+  4. Performance can decrease due to unknowing garbage collector
+  5. Cost associated with going into and out of native code
+
 #### 67. Optimize judiciosly
+
+- Don't sacrifice sound architectural principles for performance
+- Strive to write good programs rather than fast ones
+- Good programs embody the principle of information hiding: where possible, they localize design decisions within individual components
+- Strive to avoid design decisions that limit performance
+- The design components most difficult to change after the fact are those specifying interactions between components and with the outside world: APIs, wire-level protocols, and persistent data formats in particular
+- Consider the performance consequences of your API design decisions
+- It is a very bad idea to warp an API to achive good performance
+- Measure performance before and after each attempted optimization
+- Profiling tools can help you decide where to focus your optimization efforts
+
 #### 68. Adhere to generally accepted naming conventions
+
+- The Java Platform has a well-established set of naming conventions, many of which are contained in the JLS
+- Two main categories: typographical & grammatical
+- Violations can confuse and irritate other programmers who work with the code
+- TODO - make into table
+- Naming Conventions:
+  - Identifier Type - Examples
+  - Package or module - org.junit.jupiter.api, com.google.common.collect
+  - Class or Interface - Stream, FutureTask, LinkedHashMap, HttpClient
+  - Method or Field - remove, groupingBy, getCrc
+  - Constant Field - MIN_VALUE, NEGATIVE_INFINITY
+  - Local Variable - i, denom, houseNum
+  - Type Parameter - T, E, K, V, X, R, U, V, T1, T2
+- Grammatical naming conventions are more flexible and more controversial than typographical conventions
+- Refer to the JLS for more examples
+
 
 # 10. Exceptions
 
