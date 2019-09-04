@@ -547,13 +547,91 @@ Common names:
 # 8. Methods
 
 #### 49. Check parameters for validity
+
+- A method can fail quickly and cleanly with an appropriate exception if checked right away
+  - Failure to do so can result in a violation of _failure atomicity_
+- The Objects.requireNonNull method is flexible and convenient, so there's no reason to perform null checks manually anymore
+- It's important to check validity of parameters not used by a method, but stored for later use (including constructors)
+- Indiscriminate reliance on imlpicit validity checks can result in the loss of _failure atomicity_
+
 #### 50. Make defensive copies when needed
+
+- Even in a safe language, you must program defensively, with the assumption that clients of your class will do their best to destroy its invariants
+- Date is obselete and should no longer be used in new code
+- It is essential to make defensive copies of the mutable parameters to the constructor
+- Defensive copies are made _before_ checking the validity of the parameters, and the validity check is performed on the copies rather than the originals
+  - Protects the class against changes to the parameters from another thread, known as TOCTOU attacks
+- Do not use the clone method to make a defensive copy of a parameter whose type is subclassable by untrusted parties
+- Return defensive copies of mutable internal fields
+- Nonzero length arrays are always mutable; thus, make a defensive copy or return an immutable view
+- Real lesson: use immutable objects as components when possible to avoid worrying about defensive copying
+- If the cost of the copy would be prohibitive _and_ the class trusts its clients not to modify the components inappropriately, then the defensive copy may be replaced by documentation outlining the client's responsiblity not to modify the affected components
+
 #### 51. Design method signatures carefully
+
+- Choose method names carefully
+- Don't go overboard in providing convenience methods; when in doubt, leave it out
+- Avoid long parameter lists: aim for 4 or fewer
+- Long sequences of identically typed parameters ares especially harmful
+  - Will compile and run with swapped parameters
+  - How to shorten:
+    1) Break method into multiple methods
+    2) Create helper classes to hold groups of parameters
+    3) Adapt the builder pattern from object construction to method invocation
+- For parameter types, favor interfaces over classes
+- Prefer two-element enum types to boolean parameters, unless the meaning of the boolean is clear from the _method name_
+
 #### 52. Use overloading judiciously
+
+- Recall that the choice of which overloading (method) to invoke is made at compile time
+- Selection among overloaded methods is _static_, while selection among overridden methods is _dynamic_
+- Avoid confusing uses of overloading
+- A safe, conservative policy is never to export two overloading with the same number of parameters
+- You can always give methods different names instead of overloading them
+- Do NOT overload methods to take different functional interfaces in the same argument position
+
 #### 53. Use varargs judiciously
+
+- Varargs methods accept 0+ parameters of the same type (int... args)
+- To accept 1+, use one guaranteed parameter and one varargs parameter
+- Exercise care when using varargs in performance-critical situations
+
 #### 54. Return empty collections or arrays, not nulls
+
+- There is no reason to special-case the situation where nothing is returned
+- Returning nulls is error-prone because the programmer writing the client may forget to write the special case code to handle a null return value
+- Do not preallocate an empty array in hopes of improving performance
+- Never return null in place of an empty array or collection
+
 #### 55. Return optionals judiciously
+
+- The Optional<T> class represents an immutable container that can hold either a single non-null T reference or nothing at all
+  - If the Optional<T> contains nothing, we call it _empty_
+  - If the Optional<T> contains a value of type T, we call call it _present_
+- A method that conceptually returns a T but may be unable to do so under certain circumstances can instead be declared to return an Optional<T>
+- Never return a null value from an Optional-returning method: it defeats the entire purpose of the facility
+- Optionals are similar in spirit to checked exceptions, in that they force the user of an API to confront the fact that there may be no value returned
+- Container types, including Collections, Maps, Streams, arrays and Optionals should _not_ be wrapped in Optionals
+- You should declare a method to return Optional<T> if it might not be able to return a result _and_ clients will have to perform special processing if no result is returned
+- You should never return an Optional of a boxed primitive type (use OptionalInt, etc)
+- It is almost never appropriate to use an Optional as a key, value, or element in a collection or an array
+
 #### 56. Write doc comments for all exposed API elements
+
+- To document your API properly, you must precede every exported class, interface, constructor, method, and field declaration with a doc comment
+- If a class is serializable, you should also document its serialized form
+- The doc comment for a method should describe succinctly the contract between them method and its client
+  - What it does, not how
+  - Method's preconditions and postconditions
+  - Any side effects: observable changes in the state of the system that are not obviously required in order to achieve the postcondition
+- Doc comments should be readable both in the source code and in the generated documentation
+- No two members or constructors in a class or interface should have the same summary description
+- When documenting a generic type or method, be sure to document all type parameters
+- When documenting an enum type, be sure to document the constants as well as the type and any public methods
+- When documenting an annotation type, be sure to document any members and the type itself
+- Whether or not a class or static method is thread-safe, you should document its thread safety
+- Read the web pages generated by the Javadoc Utility to ensure they look correct and are readable
+
 
 # 9. General Programming
 
