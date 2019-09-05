@@ -4,11 +4,11 @@ A collection of the major points made in the book Effective Java by Joshua Bloch
 Disclaimer: All content is taken from the book and should credited to Joshua Bloch and the references listed in the book.
 
 # TODO
-- All details for items
 - Tables
 - Special formatting for code, method names, etc
 - Table of contents
 - Spell check
+- Formatting weirdness with bullets
 
 # 2. Creating and Destroying Objects
 
