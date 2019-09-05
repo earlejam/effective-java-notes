@@ -6,22 +6,21 @@ Disclaimer: All content is taken from the book and should credited to Joshua Blo
 # TODO
 - Tables
 - Special formatting for code, method names, etc
-- Table of contents
 - Spell check
 - Formatting weirdness with bullets
 
 # Table of Contents
-#### 2. Creating and Destroying Objects
-#### 3. Methods Common to All Objects
-#### 4. Classes and Interfaces
-#### 5. Generics
-#### 6. Enums and Annotations
-#### 7. Lambdas and Streams
-#### 8. Methods
-#### 9. General Programming
-#### 10. Exceptions
-#### 11. Concurrency
-#### 12. Serialization
+##### [2. Creating and Destroying Objects](https://github.com/earlejam/effective-java-notes/blob/master/README.md#2-creating-and-destroying-objects-1)
+#### [3. Methods Common to All Objects](https://github.com/earlejam/effective-java-notes/blob/master/README.md#3-methods-common-to-all-objects-1)
+#### [4. Classes and Interfaces](https://github.com/earlejam/effective-java-notes/blob/master/README.md#4-classes-and-interfaces-1)
+#### [5. Generics](https://github.com/earlejam/effective-java-notes/blob/master/README.md#5-generics-1)
+#### [6. Enums and Annotations](https://github.com/earlejam/effective-java-notes/blob/master/README.md#6-enums-and-annotations-1)
+#### [7. Lambdas and Streams](https://github.com/earlejam/effective-java-notes/blob/master/README.md#7-lambdas-and-streams-1)
+#### [8. Methods](https://github.com/earlejam/effective-java-notes/blob/master/README.md#8-methods-1)
+#### [9. General Programming](https://github.com/earlejam/effective-java-notes/blob/master/README.md#9-general-programming-1)
+#### [10. Exceptions](https://github.com/earlejam/effective-java-notes/blob/master/README.md#10-exceptions-1)
+#### [11. Concurrency](https://github.com/earlejam/effective-java-notes/blob/master/README.md#11-concurrency-1)
+#### [12. Serialization](https://github.com/earlejam/effective-java-notes/blob/master/README.md#12-serialization-1)
 
 # 2. Creating and Destroying Objects
 
