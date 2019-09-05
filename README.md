@@ -6,7 +6,6 @@ Disclaimer: All content is taken from the book and should credited to Joshua Blo
 # TODO
 - Tables
 - Special formatting for code, method names, etc
-- Spell check
 - Formatting weirdness with bullets
 
 # Table of Contents
@@ -87,8 +86,8 @@ Common names:
 
 #### 8. Avoid finalizers and cleaners
 
-- Finalizers are unpredictable, often dangerous, and generally unneccessary
-- Cleaners are less dangerous than finalizers, but are still unpredictable and generally unneccessary
+- Finalizers are unpredictable, often dangerous, and generally unnecessary
+- Cleaners are less dangerous than finalizers, but are still unpredictable and generally unnecessary
 - Never do anything time-critical in a finalizer or cleaner
 - Never depend on a finalizer to update critical persistent state
 - There is a -severe- performance penalty for using finalizers
@@ -100,7 +99,7 @@ Common names:
   - Objects with native peers
   - Remember super.finalize()
   - Finalizer Guardian with public nonfinal class
-- In sum, don't use either of these except as a safety net or to terminate noncritical native resources. Even then, beware indeterminancy and performance hits
+- In sum, don't use either of these except as a safety net or to terminate noncritical native resources. Even then, beware indeterminacy and performance hits
 
 #### 9. Always use try-with-resources in preference to try-finally when working with resources that must be closed
 
@@ -116,7 +115,7 @@ Common names:
   - no need for logical equality test
   - superclass overrode equals and still applies
   - certain that equals will never be invoked
-- Once you've violated the equals contract, you don't how how other objects will behave when confronted with yours
+- Once you've violated the equals contract, you don't how other objects will behave when confronted with yours
 - There is no way to extend an instantiable class and add a value component while preserving the equals contract
 - Workaround: favor composition over inheritance (e.g. give ColorPoints a private Point field and a public view method: asPoint())
 - But: can add a value component to a subclass of an abstract class without violating equals contract
@@ -152,7 +151,7 @@ Common names:
 - Must ensure that the new object does no harm to the original object and properly establishes invariants on the clone
 - The Cloneable architecture is incompatible with normal use of final fields referring to mutable objects
 - Try a deepCopy method for objects with complex mutable state
-- A clone method must never invoke an overrideable method on the clone under construction
+- A clone method must never invoke an overridable method on the clone under construction
 - Public clone methods should omit the throws clause
 - A better approach to object copying is to provide a "copy constructor" or "copy factory" because 1) they don't conflict with proper use of final fields and 2) don't throw unnecessary checked exceptions, etc
 - New interfaces should not extend Cloneable
@@ -161,14 +160,14 @@ Common names:
 #### 14. Consider implementing Comparable
 
 - Should generally agree with equals
-- Use of < and > in compareTo methods is verbose, error-prone, and not reccommended
+- Use of < and > in compareTo methods is verbose, error-prone, and not recommended
 - Start with the most significant fields
 - Do not use difference-based comparators
 
 
 # 4. Classes and Interfaces
 
-#### 15. Minimize the accessability of classes and members
+#### 15. Minimize the accessibility of classes and members
 
 - Cleanly separate API from implementation (encapsulation)
 - Make each class or member as inaccessible as possible
@@ -222,12 +221,12 @@ Common names:
 
 #### 19. Design and document for inheritance or else prohibit it
 
-- The class must document its self-use of overrideable methods
+- The class must document its self-use of overridable methods
 - A class may have to provide hooks into its internal workings in the form of judiciously chosen protected methods
 - The _only_ way to test a class designed for inheritance is to write subclasses (~3 sufficient)
 - You must test your class by writing subclasses _before_ you release it
-- Constructors must not invoke overrideable methods (leads to program failures)
-- Neither clone nor readObject may invoke an overrideable method directly or indirectly
+- Constructors must not invoke overridable methods (leads to program failures)
+- Neither clone nor readObject may invoke an overridable method directly or indirectly
 - The best solution is to prohibit subclassing in classes that are not designed and documented to be safely subclassed
 
 #### 20. Prefer interfaces to abstract classes
@@ -341,7 +340,7 @@ Common names:
 - Generic singleton factory: a static factory method that deals out a single immutable object for each requested type parameterization
 - Common use of recursive type bounds is in connection with the Comparable interface:
   - public interface Comparable<T> { int compareTo(T o); }
-  - Used to ensure "mutual compatability", i.e. each element in a collection can be compared to every other
+  - Used to ensure "mutual compatibility", i.e. each element in a collection can be compared to every other
   - public static <E extends Comparable<E>> E max(Collection<E> c);
     - Type reads as "any type E that can be compared to itself"
   - Can generify methods without breaking existing clients
@@ -363,7 +362,7 @@ Common names:
 
 - Varargs are a "leaky abstraction"; array is visible
 - Heap pollution occurs when a variable of a parameterized type refers to an object that is not of that type
-- It is unsafe to store a value in a generic carargs array parameter
+- It is unsafe to store a value in a generic varargs array parameter
 - The @SafeVarargs annotation constitutes a promise by the author of a method that it's typesafe
 - Safe means the method doesn't store anything into the varargs array (overwrite) and doesn't allow an array reference to escape
 - It is unsafe to give another method access to a generic varargs parameter array (with two exceptions)
@@ -405,7 +404,7 @@ Common names:
 
 - Most serious problem with ordinal indexing: your responsibility to use correct int value; ints do not provide the type safety of enums
 - Can use 3-parameter version of Collectors.groupingBy to specify EnumMap implementation if desired
-- It is rarely appropriate to use ordinals ito index into arrays; use EnumMap instead
+- It is rarely appropriate to use ordinals to index into arrays; use EnumMap instead
 
 #### 38. Emulate extensible enums with interfaces
 
@@ -432,9 +431,9 @@ Common names:
 
 - Marker interface: no method declarations, merely designates or "marks" a class that implements the interface as having some property (e.g. Serializable)
 - Marker interfaces _define a type_ that is implemented by instances of the marked class; marker annotations do not
-- Marker ineterfaces can be targeted more precisely
+- Marker interfaces can be targeted more precisely
 - The Set interface is arguable just a restricted marker interface
-- The chief advantage of marker annotations over marker interfces is that they're part of the larger annotations facility
+- The chief advantage of marker annotations over marker interfaces is that they're part of the larger annotations facility
 - How to decide between the two:
   - If it's not a class or interface, choose the annotation
   - If class or interface: "Might I want to write 1+ methods that accept objects only having this marking?"
@@ -458,7 +457,7 @@ Common names:
   - Create instances of interfaces with multiple abstract methods
   - Need access to function object from within its body
 - You should rarely, if ever, serialize a lambda. Instead, use instance of private static nested class
-- Don't use anonymous classes for function objects unless you have to create instances of types that aren't functional interefaces
+- Don't use anonymous classes for function objects unless you have to create instances of types that aren't functional interfaces
 
 #### 43. Prefer method references to lambdas
 
@@ -551,7 +550,7 @@ Common names:
   - This is because all of these can be easily split into ranges by a 'spliterator'
   - All provide at least good locality of reference
 - Parallelizing a pipeline will do little if a lot of work is done in the terminator and that work is inherently sequential
-  - The best candidates for parallelism are reductions and short circuiting operations
+  - The best candidates for parallelism are reductions and short-circuiting operations
 - Not only can parallelizing a stream lead to poor performance, including liveness failures; it can lead to incorrect results and unpredictable behavior (safety failures)
 - Under the right circumstances, it _is_ possible to achieve near-linear speedup in the number of processor cores simply by adding a 'parallel' call to a stream pipeline
 
@@ -564,12 +563,12 @@ Common names:
   - Failure to do so can result in a violation of _failure atomicity_
 - The Objects.requireNonNull method is flexible and convenient, so there's no reason to perform null checks manually anymore
 - It's important to check validity of parameters not used by a method, but stored for later use (including constructors)
-- Indiscriminate reliance on imlpicit validity checks can result in the loss of _failure atomicity_
+- Indiscriminate reliance on implicit validity checks can result in the loss of _failure atomicity_
 
 #### 50. Make defensive copies when needed
 
 - Even in a safe language, you must program defensively, with the assumption that clients of your class will do their best to destroy its invariants
-- Date is obselete and should no longer be used in new code
+- Date is obsolete and should no longer be used in new code
 - It is essential to make defensive copies of the mutable parameters to the constructor
 - Defensive copies are made _before_ checking the validity of the parameters, and the validity check is performed on the copies rather than the originals
   - Protects the class against changes to the parameters from another thread, known as TOCTOU attacks
@@ -577,14 +576,14 @@ Common names:
 - Return defensive copies of mutable internal fields
 - Nonzero length arrays are always mutable; thus, make a defensive copy or return an immutable view
 - Real lesson: use immutable objects as components when possible to avoid worrying about defensive copying
-- If the cost of the copy would be prohibitive _and_ the class trusts its clients not to modify the components inappropriately, then the defensive copy may be replaced by documentation outlining the client's responsiblity not to modify the affected components
+- If the cost of the copy would be prohibitive _and_ the class trusts its clients not to modify the components inappropriately, then the defensive copy may be replaced by documentation outlining the client's responsibility not to modify the affected components
 
 #### 51. Design method signatures carefully
 
 - Choose method names carefully
 - Don't go overboard in providing convenience methods; when in doubt, leave it out
 - Avoid long parameter lists: aim for 4 or fewer
-- Long sequences of identically typed parameters ares especially harmful
+- Long sequences of identically typed parameters are especially harmful
   - Will compile and run with swapped parameters
   - How to shorten:
     1) Break method into multiple methods
@@ -619,7 +618,7 @@ Common names:
 
 - The Optional<T> class represents an immutable container that can hold either a single non-null T reference or nothing at all
   - If the Optional<T> contains nothing, we call it _empty_
-  - If the Optional<T> contains a value of type T, we call call it _present_
+  - If the Optional<T> contains a value of type T, we call it _present_
 - A method that conceptually returns a T but may be unable to do so under certain circumstances can instead be declared to return an Optional<T>
 - Never return a null value from an Optional-returning method: it defeats the entire purpose of the facility
 - Optionals are similar in spirit to checked exceptions, in that they force the user of an API to confront the fact that there may be no value returned
@@ -657,7 +656,7 @@ Common names:
 
 #### 58. Prefer for-each loops to traditional for-loops
 
-- 3 common situations where you cant use for-each:
+- 3 common situations where you can't use for-each:
   1. Destructive filtering: use iterator & its remove method instead
   2. Transforming: use list iterator or array index instead
   3. Parallel iteration: use iterator or array index variable instead
@@ -694,7 +693,7 @@ Common names:
 
 #### 63. Beware the performance of string concatenation
 
-- Using the string concatenation operator repeatedly to concatenate n strings requres time quadratic in n
+- Using the string concatenation operator repeatedly to concatenate n strings requires time quadratic in n
 - To achieve acceptable performance, use a StringBuilder in place of a String
 - Don't use the string concatenation operator to combine more than a few strings
 
@@ -735,7 +734,7 @@ Common names:
   4. Performance can decrease due to unknowing garbage collector
   5. Cost associated with going into and out of native code
 
-#### 67. Optimize judiciosly
+#### 67. Optimize judiciously
 
 - Don't sacrifice sound architectural principles for performance
 - Strive to write good programs rather than fast ones
@@ -743,7 +742,7 @@ Common names:
 - Strive to avoid design decisions that limit performance
 - The design components most difficult to change after the fact are those specifying interactions between components and with the outside world: APIs, wire-level protocols, and persistent data formats in particular
 - Consider the performance consequences of your API design decisions
-- It is a very bad idea to warp an API to achive good performance
+- It is a very bad idea to warp an API to achieve good performance
 - Measure performance before and after each attempted optimization
 - Profiling tools can help you decide where to focus your optimization efforts
 
@@ -783,7 +782,7 @@ Common names:
 - Parsing the string representation of an exception to ferret out additional information is extremely bad practice; it is nonportable and fragile
 - Provide methods on your checked exceptions to aid in recovery
 
-#### 71. Avoid unneccessary use of checked exceptions
+#### 71. Avoid unnecessary use of checked exceptions
 
 - Unlike return codes and unchecked exceptions, these force programmers to deal with problems, enhancing reliability
 - The burden is justified if the exceptional condition cannot be prevented by proper use of the API _and_ the programmer using the API can take some useful action once confronted with the exception
@@ -812,15 +811,15 @@ Common names:
 
 - Higher layers should catch lower-level exceptions and, in their place, throw exceptions that can be explained in terms of the higher-level abstraction; this is known as _Exception translation_
 - _Exception chaining_ is called for when the lower-level exception might be helpful to someone debugging the problem that caused the higher-level exception; lower-level exception passed to high-level one as "cause"
-- While exception translation is superior to mindless propogation of exceptions from lower layers, it should not be overused
+- While exception translation is superior to mindless propagation of exceptions from lower layers, it should not be overused
 
 #### 74. Document all exceptions thrown by each method
 
 - Always declare checked exceptions individually, and document precisely the conditions under which each one is thrown
 - Familiarizing programmers with all of the errors they can make helps them avoid making these errors
 - The unchecked exceptions of an interface form part of the interface's _general contract_ and enables common behavior among multiple implementations
-- Use the Javadoc @throws tag to document each exception that a method can throw, but do NOT use the 'throws' keykword on unchecked exceptions; this helps programmers separate the two
-- If an exception is thrown by many methods in a class for the same reason, you can document the exception in the class's documentation comment (e.g NullPointerException)
+- Use the Javadoc @throws tag to document each exception that a method can throw, but do NOT use the 'throws' keyword on unchecked exceptions; this helps programmers separate the two
+- If an exception is thrown by many methods in a class for the same reason, you can document the exception in the class's documentation comment (e.g. NullPointerException)
 
 #### 75. Include failure-capture information in detail messages
 
@@ -833,7 +832,7 @@ Common names:
 - Generally speaking, a failed method invocation should leave the object in the state that it was in prior to the invocation
   - This is known as _failure atomicity_
 - If an object is immutable, failure atomicity is free
-- For methods with mutable objects, check validity of parameters befroe making any changes
+- For methods with mutable objects, check validity of parameters before making any changes
 - Another approach: perform the operation on a temporary copy of the object and replace the contents once the operation is complete
 - Far less common: write "recovery code" to intercept failures and roll back (mostly for durable data structures)
 - If this rule is violated, the API documentation should clearly indicate what state the object will be left in
@@ -860,14 +859,14 @@ Common names:
 
 #### 79. Avoid excessive synchronization
 
-- Depending on the situation, excessive synchronization can cause reduced performace, deadlock, or even nondeterministic behavior
+- Depending on the situation, excessive synchronization can cause reduced performance, deadlock, or even nondeterministic behavior
 - To avoid liveness and safety failures, never cede control to the client within a synchronized method or block, including "alien" methods
 - Multi-catch clauses for exceptions can greatly increase the clarity and reduce the size of programs that behave identically in response to different exception types
 - Java uses _reentrant_ locks; they can simplify the construction of multithreaded object-oriented programs, but they can turn liveness failures into safety failures
-- Try concurrent collections liek CopyOnWriteArrayList
+- Try concurrent collections like CopyOnWriteArrayList
 - An alien method invoked outside of a synchronized region is known as an _open call_; besides preventing failures, open calls can greatly increase concurrency
 - As a rule, you should do as little work as possible inside synchronized regions
-- In a multicore world, the real cost of excessive synchronization is not the CPU time spent getting locks; it is contention: the lost opportunities for parallelism and the delays imposed by the need to ensure taht every core has a consistent view of memory
+- In a multicore world, the real cost of excessive synchronization is not the CPU time spent getting locks; it is contention: the lost opportunities for parallelism and the delays imposed by the need to ensure that every core has a consistent view of memory
 - If you're writing a mutable class, you have two options: you can omit all synchronization and allow the client to synchronize externally if concurrent use is desired, or you can synchronize internally, making the class _thread safe_
 - You should choose #2 only if you can achieve significantly higher concurrency with internal synchronization versus external
 - If a method modifies a static field and there is any possibility that the method will be called from multiple threads, you _must_ synchronize access to the field internally because it is not possible for the client to do this correctly externally
@@ -896,7 +895,7 @@ Common names:
 - Countdown latches are single-use barriers that allow one or more threads to wait for 1+ threads to do something
 - For internal timing, always use System.nanoTime rather than System.currentTimeMillis
 - The wait method is used to make a thread wait for some condition, and must be invoked inside a synchronized region that locks the object on which it is invoked
-- Always use the wait loop idiom to invoke the wait method; never invoke it outiside of a loop
+- Always use the wait loop idiom to invoke the wait method; never invoke it outside of a loop
 - The advice to use notifyall rather than notify is reasonable and conservative
 - There is seldom, if ever, a reason to use wait and notify in new code
 
@@ -941,7 +940,7 @@ Common names:
 - Deserialization of untrusted streams can result in Remote Code Execution (RCE), Denial of Service (DoS) and a range of other exploits
 - Attackers can create gadget chains powerful enough to execute arbitrary code
 - Deserialization bombs can cause DoS
-- The best way to avoid serialization expoits is never to deserialize anything
+- The best way to avoid serialization exploits is never to deserialize anything
 - There is no reason to use Java serialization in any new system you write
 - The leading cross-platform structured data representations are JSON and Protocol Buffers (a.k.a _protobuf_)
   - JSON is text-based and human readable
@@ -953,7 +952,7 @@ Common names:
 
 - A major cost of implementing Serializable is that it decreases the flexibility to change a class's implementation once it has been released
 - When a class implements Serializable, its byte-stream encoding becomes part of its exported API
-- If you accept the default serialized form and later change a class's internal representation, an incompatable change in the serialized form will result
+- If you accept the default serialized form and later change a class's internal representation, an incompatible change in the serialized form will result
 - A second cost of implementing Serializable is that it increases the likelihood of bugs and security holes
 - A third cost of implementing Serializable is that it increases the testing burden associated with releasing a new version of the class
 - Implementing Serializable is not a decision to be undertaken lightly
@@ -972,12 +971,12 @@ Common names:
   2. It can consume excessive space
   3. It can consume excessive time
   4. It can cause stack overflows
-- The 'transient' modifier indicates that an instance field is able to be omitted from a class's default serialzed form
+- The 'transient' modifier indicates that an instance field is able to be omitted from a class's default serialized form
 - Every instance field that can be declared transient should be
 - Before deciding to make a field nontransient, convince yourself that its value is part of the logical state of the object
 - You must impose any synchronization on object serialization that you would impose on any other method that reads the entire state of the object
-- Regardless of what serialized form you choose, decalre an explicit serial version UID in every serializable class you write
-- Do not change the serial version UID unless you want to break compatability with all existing serialized instances of a class
+- Regardless of what serialized form you choose, declare an explicit serial version UID in every serializable class you write
+- Do not change the serial version UID unless you want to break compatibility with all existing serialized instances of a class
 
 #### 88. Write readObject methods defensively
 
@@ -985,7 +984,7 @@ Common names:
 - readObject must also check its parameters for validity and make defensive copies of parameters where appropriate
 - When an object is deserialized, it is critical to defensively copy any field containing an object reference that a client must not possess
 - Every serializable immutable class containing private mutable components must defensively copy these components in its readObject method
-- Like a constructor, a readObject method must not invoke an overrideable method, directly or indirectly
+- Like a constructor, a readObject method must not invoke an overridable method, directly or indirectly
 - Check any invariants and throw an InvalidObjectException if a check fails; these checks should follow any defensive copying
 
 #### 89. For instance control, prefer enum types to readResolve
@@ -994,16 +993,16 @@ Common names:
 - readResolve can be used to maintain the singleton property for a class
 - If you depend on readResolve for instance control, all instance fields with object reference types _must_ be declared transient; otherwise it is possible for a determined attacker to secure a reference to the deserialized object before its readResolve method is run
 - The accessibility of readResolve is significant (private, package-private, etc)
-- Use enum types to enforce instance control invariants whereever possible
+- Use enum types to enforce instance control invariants wherever possible
 
 #### 90. Consider serialization proxies instead of serialized instances
 
 - The _Serialization Proxy_ pattern greatly reduces the risks from traditional serialization
 - First, design a private static nested class that concisely represents the logical state of an instance of the enclosing class
-  - This is known as the _Serialization Proxy_ of the enclosing class; it should have a singel constructor whose parameter type is that of the enclosing class
+  - This is known as the _Serialization Proxy_ of the enclosing class; it should have a single constructor whose parameter type is that of the enclosing class
   - The constructor merely copies the data from its argument, it need not do any consistency checking or defensive copying
 - Both the enclosing class and its serialization proxy must be declared to implement Serializable
-- Next, add a writeReplace method on the enclosing class that creates a SerializationProxy instance with the aformentioned constructor
+- Next, add a writeReplace method on the enclosing class that creates a SerializationProxy instance with the aforementioned constructor
 - Add a readObject method to the enclosing class that throws an InvalidObjectException with a message saying the Proxy is required
 - Finally, provide a readResolve method on the SerializationProxy class to return a logically equivalent instance of the enclosing class
 - This readResolve method creates an instance of the enclosing class using only its public API and therein lies the beauty of the pattern; it largely eliminates the extralinguistic character of serialization, freeing you from having to separately ensure that deserialized instances obey the class's invariants
