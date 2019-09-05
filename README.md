@@ -10,7 +10,7 @@ Disclaimer: All content is taken from the book and should credited to Joshua Blo
 - Formatting weirdness with bullets
 
 # Table of Contents
-##### [2. Creating and Destroying Objects](https://github.com/earlejam/effective-java-notes/blob/master/README.md#2-creating-and-destroying-objects-1)
+#### [2. Creating and Destroying Objects](https://github.com/earlejam/effective-java-notes/blob/master/README.md#2-creating-and-destroying-objects-1)
 #### [3. Methods Common to All Objects](https://github.com/earlejam/effective-java-notes/blob/master/README.md#3-methods-common-to-all-objects-1)
 #### [4. Classes and Interfaces](https://github.com/earlejam/effective-java-notes/blob/master/README.md#4-classes-and-interfaces-1)
 #### [5. Generics](https://github.com/earlejam/effective-java-notes/blob/master/README.md#5-generics-1)
