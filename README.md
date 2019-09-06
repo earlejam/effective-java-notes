@@ -7,6 +7,7 @@ Disclaimer: All content is taken from the book and should credited to Joshua Blo
 - Tables
 - Special formatting for code, method names, etc
 - Formatting weirdness with bullets
+- Escape some angled brackets that aren't showing up
 
 # Table of Contents
 #### [2. Creating and Destroying Objects](https://github.com/earlejam/effective-java-notes/blob/master/README.md#2-creating-and-destroying-objects-1)
@@ -296,18 +297,21 @@ Common names:
   -  if (o instanceof Set) {
       Set<?> s = (Set<?> o);
      }
-- Generic Terms: (TODO make into table)
-  - Parameterized Type - List<String>
-  - Actual Type Parameter - String
-  - Generic Type - List<E>
-  - Format Type Parameter - E
-  - Unbounded Wildcard Type - List<?>
-  - Raw Type - List
-  - Bounded Type Parameter - <E extends Number>
-  - Recursive Type Bound - <T extends Comparable<T>>
-  - Bounded Wildcard Type - List<? extends Number>
-  - Generic Method - static <E> List<E> asList(E[] a)
-  - Type Token - String.class
+- Generic Terms:
+  
+  | Term | Example |
+  | ------| ------- |
+  | Parameterized Type | List\<String> |
+  | Actual Type Parameter | String |
+  | Generic Type | List<E> |
+  | Format Type Parameter | E |
+  | Unbounded Wildcard Type | List<?> |
+  | Raw Type | List |
+  | Bounded Type Parameter | \<E extends Number> |
+  | Recursive Type Bound | <T extends Comparable<T>> |
+  | Bounded Wildcard Type | List<? extends Number> |
+  | Generic Method | static <E> List<E> asList(E[] a) |
+  | Type Token | String.class |
 
 #### 27. Eliminate unchecked warnings
 
@@ -467,13 +471,14 @@ Common names:
 - Method reference reduces visual clutter
 - Sometimes lambda parameters are useful documentation
   - Consider them especially with large class names or if method lies within same class as lambda
-- TODO: make into table
-- Method Reference Type - Example - Lambda Equivalent
-- Static - Integer::parseInt - str -> Integer.parseInt(str)
-- Bound - Instant.now()::isAfter - Instant then = Instant.now(); t -> then.isAfter(t);
-- Unbound - String::toLowerCase - str -> str.toLowerCase()
-- Class constructor - TreeMap<K,V>::new - () -> new TreeMap<K,V>
-- Array constructor - int[]::new - len -> new int[len]
+
+| Method Reference Type | Example | Lambda Equivalent |
+| --- | --- | --- |
+| Static | Integer::parseInt | str -> Integer.parseInt(str) |
+| Bound | Instant.now()::isAfter | Instant then = Instant.now(); t -> then.isAfter(t); |
+| Unbound | String::toLowerCase | str -> str.toLowerCase() |
+| Class constructor | TreeMap<K,V>::new | () -> new TreeMap<K,V> |
+| Array constructor | int[]::new | len -> new int[len] |
 - Where method references are shorter and clearer, use them; where they aren't, stick with lambdas
 
 #### 44. Favor the use of standard functional interfaces
@@ -486,14 +491,15 @@ Common names:
   3. Function: argument and return types differ
   4. Supplier: function that takes no arguments and returns (supplies) a value
   5. Consumer: function that takes an argument but returns nothing
-- TODO turn into table
-- Interface - Function Signature - Example
-- UnaryOperator<T> - T apply(T t) - String::toLowerCase
-- BinaryOperator<T> - T apply(T t1, T t2) - BigInteger::add
-- Predicate<T> - boolean test(T t) - Collection::isEmpty
-- Function<T, R> - R apply(T t) - Arrays::asList
-- Supplier<T> - T get() - Instant::now
-- Consumer<T> - void accept(T t) - System.out::println
+
+| Interface | Function Signature | Example |
+| --- | --- | --- |
+| UnaryOperator<T> | T apply(T t) | String::toLowerCase |
+| BinaryOperator<T> | T apply(T t1, T t2) | BigInteger::add |
+| Predicate<T> | boolean test(T t) | Collection::isEmpty |
+| Function<T, R> | R apply(T t) | Arrays::asList |
+| Supplier<T> | T get() | Instant::now |
+| Consumer<T> | void accept(T t) | System.out::println |
 - Don't be tempted to use basic functional interfaces with boxes primitives instead of primitive functional interfaces
 - Seriously consider writing a purpose-built functional interface if you need one that shares one of the following with Comparator:
    - It will be commonly used and could benefit from a descriptive name
@@ -751,15 +757,16 @@ Common names:
 - The Java Platform has a well-established set of naming conventions, many of which are contained in the JLS
 - Two main categories: typographical & grammatical
 - Violations can confuse and irritate other programmers who work with the code
-- TODO - make into table
+
 - Naming Conventions:
-  - Identifier Type - Examples
-  - Package or module - org.junit.jupiter.api, com.google.common.collect
-  - Class or Interface - Stream, FutureTask, LinkedHashMap, HttpClient
-  - Method or Field - remove, groupingBy, getCrc
-  - Constant Field - MIN_VALUE, NEGATIVE_INFINITY
-  - Local Variable - i, denom, houseNum
-  - Type Parameter - T, E, K, V, X, R, U, V, T1, T2
+  | Identifier Type | Examples |
+  | --- | --- |
+  | Package or module | org.junit.jupiter.api, com.google.common.collect |
+  | Class or Interface | Stream, FutureTask, LinkedHashMap, HttpClient |
+  | Method or Field | remove, groupingBy, getCrc |
+  | Constant Field | MIN_VALUE, NEGATIVE_INFINITY |
+  | Local Variable | i, denom, houseNum |
+  | Type Parameter | T, E, K, V, X, R, U, V, T1, T2 |
 - Grammatical naming conventions are more flexible and more controversial than typographical conventions
 - Refer to the JLS for more examples
 
@@ -797,14 +804,15 @@ Common names:
   2) Programs using your API are easier to read because they're not cluttered with unfamiliar exceptions
   3) Smaller memory footprint
 - Do _not_ reuse Exception, RuntimeException, Throwable, or Error directly
-- TODO make into table
-  - Exception - Occasion for use
-  - IllegalArgumentException - Non-null parameter value is inappropriate
-  - IllegalStateException - Object state is inappropriate for method invocation
-  - NullPointerException - Parameter value is null where prohibited
-  - IndexOutOfBoundsException - Index parameter value is out of range
-  - ConcurrentModificationException - Concurrent modification of an object has been detected where prohibited
-  - UnsupportedOperationException - Object does not support method
+
+  | Exception | Occasion for use |
+  | --- | --- |
+  | IllegalArgumentException | Non-null parameter value is inappropriate |
+  | IllegalStateException | Object state is inappropriate for method invocation |
+  | NullPointerException | Parameter value is null where prohibited |
+  | IndexOutOfBoundsException | Index parameter value is out of range |
+  | ConcurrentModificationException | Concurrent modification of an object has been detected where prohibited |
+  | UnsupportedOperationException | Object does not support method |
 - Throw IllegalStateException if no argument values would have worked, otherwise throw IllegalArgumentException
 
 #### 73. Throw exceptions appropriate to the abstraction
