@@ -759,6 +759,7 @@ Common names:
 - Violations can confuse and irritate other programmers who work with the code
 
 - Naming Conventions:
+
   | Identifier Type | Examples |
   | --- | --- |
   | Package or module | org.junit.jupiter.api, com.google.common.collect |
