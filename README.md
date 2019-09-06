@@ -807,6 +807,7 @@ Common names:
   2) Programs using your API are easier to read because they're not cluttered with unfamiliar exceptions
   3) Smaller memory footprint
 - Do _not_ reuse Exception, RuntimeException, Throwable, or Error directly
+- Common Exceptions Use Cases:
 
   | Exception | Occasion for use |
   | --- | --- |
