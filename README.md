@@ -471,6 +471,7 @@ Common names:
 - Method reference reduces visual clutter
 - Sometimes lambda parameters are useful documentation
   - Consider them especially with large class names or if method lies within same class as lambda
+- Method references vs lambdas:
 
 | Method Reference Type | Example | Lambda Equivalent |
 | --- | --- | --- |
@@ -491,6 +492,7 @@ Common names:
   3. Function: argument and return types differ
   4. Supplier: function that takes no arguments and returns (supplies) a value
   5. Consumer: function that takes an argument but returns nothing
+- 6 basic functional interfaces:
 
 | Interface | Function Signature | Example |
 | --- | --- | --- |
