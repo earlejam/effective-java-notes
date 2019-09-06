@@ -4,9 +4,7 @@ A collection of the major points made in the book Effective Java by Joshua Bloch
 Disclaimer: All content is taken from the book and should credited to Joshua Bloch and the references listed in the book.
 
 # TODO
-- Tables
 - Special formatting for code, method names, etc
-- Formatting weirdness with bullets
 - Escape some angled brackets that aren't showing up
 
 # Table of Contents
