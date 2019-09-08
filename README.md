@@ -386,7 +386,7 @@ Common names:
 
 #### 34. Use enums instead of int constants
 
-- Int constants have no type safety, little expressiveness
+- `int` constants have no type safety, little expressiveness
 - Brittle because if the actual values change, must be re-compiled by clients
 - Enums are classes that export one instance for each enum constant via a public final static field
 - To associate data with enum constants, declare instance fields and write a constructor that takes the data and stores it in the fields
@@ -406,9 +406,9 @@ Common names:
 
 #### 37. Use EnumMap instead of ordinal indexing
 
-- Most serious problem with ordinal indexing: your responsibility to use correct int value; ints do not provide the type safety of enums
-- Can use 3-parameter version of Collectors.groupingBy to specify EnumMap implementation if desired
-- It is rarely appropriate to use ordinals to index into arrays; use EnumMap instead
+- Most serious problem with ordinal indexing: your responsibility to use correct `int` value; ints do not provide the type safety of enums
+- Can use 3-parameter version of `Collectors.groupingBy` to specify `EnumMap` implementation if desired
+- It is rarely appropriate to use ordinals to index into arrays; use `EnumMap` instead
 
 #### 38. Emulate extensible enums with interfaces
 
@@ -422,21 +422,21 @@ Common names:
   - Typographical errors lead to silent failures
   - No way to ensure they're used on appropriate program elements
   - No good way to associate parameter values with program elements
-- Annotations solve these problems (@AnnotationName)
+- Annotations solve these problems (`@AnnotationName`)
 - There is simply no reason to use naming patterns when you can add annotations instead
 - All programmers should use the predefined annotation types that Java provides
 
 #### 40. Consistently use the @Override annotation
 
-- Use the @Override annotation on every method declaration that you believe to override a superclass declaration
+- Use the `@Override` annotation on every method declaration that you believe to override a superclass declaration
 - Not required to annotate methods that you believe to override abstract method declarations in concrete classes
 
 #### 41. Use marker interfaces to define types
 
-- Marker interface: no method declarations, merely designates or "marks" a class that implements the interface as having some property (e.g. Serializable)
+- Marker interface: no method declarations, merely designates or "marks" a class that implements the interface as having some property (e.g. `Serializable`)
 - Marker interfaces _define a type_ that is implemented by instances of the marked class; marker annotations do not
 - Marker interfaces can be targeted more precisely
-- The Set interface is arguable just a restricted marker interface
+- The `Set` interface is arguable just a restricted marker interface
 - The chief advantage of marker annotations over marker interfaces is that they're part of the larger annotations facility
 - How to decide between the two:
   - If it's not a class or interface, choose the annotation
