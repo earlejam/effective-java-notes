@@ -283,56 +283,58 @@ Common names:
 
 #### 26. Don't use raw types
 
-- Each generic type defines a set of parameterized types, which consist of the class or interface name followed by an angle-bracketed list of _actual_ type parameters (List<E> -> List<String>)
-- Raw types (List) behave as if all generic type info were erased from the type declaration
+- Each generic type defines a set of parameterized types, which consist of the class or interface name followed by an angle-bracketed list of _actual_ type parameters (`List<E>` -> `List<String>`)
+- Raw types (`List`) behave as if all generic type info were erased from the type declaration
 - If you use raw types, you lose all the safety and expressiveness benefits of generics
-- You lose type safety if you use a raw type like List, but not if you use a parameterized type list List<Object>
-- Instead of raw types, use "unbounded wildcard types" if you want to use a generic type but you don't know or care what the actual type parameter is; so for a Set<E>, use Set<?>
-- You can't put _any_ element (other than null) into a Collection<?>; you also can't assume anything about the type of objects you get out. If you care about type, try generic methods or _bounded_ wildcard types
+- You lose type safety if you use a raw type like `List`, but not if you use a parameterized type list `List<Object>`
+- Instead of raw types, use _unbounded wildcard types_ if you want to use a generic type but you don't know or care what the actual type parameter is; so for a `Set<E>`, use `Set<?>`
+- You can put _any_ element (other than `null`) into a `Collection<?>`; you also can't assume anything about the type of objects you get out. If you care about type, try generic methods or _bounded_ wildcard types
 - You must use raw types in class literals
-- Also illegal to use instanceof operator on parameterized types since generic type info is erased as runtime
+- Also illegal to use `instanceof` operator on parameterized types since generic type info is erased as runtime
 - This is the preferred way to use the instanceof operator with generic types:
-  -  if (o instanceof Set) {
+  ```
+  if (o instanceof Set) {
       Set<?> s = (Set<?> o);
-     }
+  }
+  ```
 - Generic Terms:
   
   | Term | Example |
   | ------| ------- |
-  | Parameterized Type | List\<String> |
-  | Actual Type Parameter | String |
-  | Generic Type | List<E> |
-  | Format Type Parameter | E |
-  | Unbounded Wildcard Type | List<?> |
-  | Raw Type | List |
-  | Bounded Type Parameter | \<E extends Number> |
-  | Recursive Type Bound | <T extends Comparable<T>> |
-  | Bounded Wildcard Type | List<? extends Number> |
-  | Generic Method | static <E> List<E> asList(E[] a) |
-  | Type Token | String.class |
+  | Parameterized Type | `List\<String>` |
+  | Actual Type Parameter | `String` |
+  | Generic Type | `List<E>` |
+  | Format Type Parameter | `E` |
+  | Unbounded Wildcard Type | `List<?>` |
+  | Raw Type | `List` |
+  | Bounded Type Parameter | `\<E extends Number>` |
+  | Recursive Type Bound | `<T extends Comparable<T>>` |
+  | Bounded Wildcard Type | `List<? extends Number>` |
+  | Generic Method | `static <E> List<E> asList(E[] a)` |
+  | Type Token | `String.class` |
 
 #### 27. Eliminate unchecked warnings
 
 - Eliminate every unchecked warning that you can
-- If you can't eliminate a warning, but you can prove that the code that provoked the warning is typesafe, then (and only then) suppress the warning with an @SuppressWarnings("Unchecked") annotation
-- Always use the @SuppressWarnings annotation on the smallest scope possible
-- Every time you use a @SuppressWarnings("Unchecked") annotation, add a comment saying why it is safe to do so
+- If you can't eliminate a warning, but you can prove that the code that provoked the warning is typesafe, then (and only then) suppress the warning with a `@SuppressWarnings("Unchecked")` annotation
+- Always use the `@SuppressWarnings` annotation on the smallest scope possible
+- Every time you use a `@SuppressWarnings("Unchecked")` annotation, add a comment saying why it is safe to do so
 
 #### 28. Prefer lists to arrays
 
 - Arrays are "deficient" since some type checks will fail at runtime instead of compile time
-- Arrays are covariant whereas generics are invariant
-- Arrays are reified, meaning they enforce their type at runtime, whereas generics use type erasure
-- Generics and arrays don't mix well: new List<E>[], new List<String>[], new E[] are all illegal
+- Arrays are _covariant_ whereas generics are _invariant_
+- Arrays are _reified_, meaning they enforce their type at runtime, whereas generics use type erasure
+- Generics and arrays don't mix well: `new List<E>[]`, `new List<String>[]`, `new E[]` are all illegal
 - Generic arrays would not be typesafe
-- E, List<E>, List<String> are known as non-reifiable types meaning their runtime representations contain less info than their compile-time representations
-- Try List<E> instead of E[]
+- `E`, `List<E>`, `List<String>` are known as non-reifiable types meaning their runtime representations contain less info than their compile-time representations
+- Try `List<E>` instead of `E[]`
 
 #### 29. Favor generic types
 
 - How to generify a class:
-  - Add 1+ type parameters to its declaration (public class Stack<E>)
-  - Replace Object with E
+  - Add 1+ type parameters to its declaration (`public class Stack<E>`)
+  - Replace Object with `E`
   - Fix warnings and errors (e.g. with arrays, but beware of heap pollution)
 - Generifying a class does not break it for existing clients
 
@@ -340,23 +342,23 @@ Common names:
 
 - Generic methods need a type parameter declared in angle brackets before the return type
 - Generic singleton factory: a static factory method that deals out a single immutable object for each requested type parameterization
-- Common use of recursive type bounds is in connection with the Comparable interface:
-  - public interface Comparable<T> { int compareTo(T o); }
-  - Used to ensure "mutual compatibility", i.e. each element in a collection can be compared to every other
-  - public static <E extends Comparable<E>> E max(Collection<E> c);
+- Common use of recursive type bounds is in connection with the `Comparable` interface:
+  - `public interface Comparable<T> { int compareTo(T o); }`
+  - Used to ensure _mutual compatibility_, i.e. each element in a collection can be compared to every other
+  - `public static <E extends Comparable<E>> E max(Collection<E> c);`
     - Type reads as "any type E that can be compared to itself"
   - Can generify methods without breaking existing clients
 
 #### 31. Use bounded wildcards to increase API flexibility
 
-- <? extends E> for subtypes
-- <? super E> for supertypes
+- `<? extends E>` for subtypes
+- `<? super E>` for supertypes
 - For maximum flexibility, use wildcard types on input parameters that represent producers or consumers
 - Rule - PECS: Producer-extends, Consumer-super
 - Do not use bounded wildcard types as return types!
 - If the user of a class has to think about wildcard types, there is probably something wrong with its API
-- Use Comparable<? super T> in preference to Comparable<T>
-- Use Comparator<? super T> in preference to Comparator<T>
+- Use `Comparable<? super T>` in preference to `Comparable<T>`
+- Use `Comparator<? super T>` in preference to `Comparator<T>`
 - If a type parameter appears only once in a _method declaration_, replace it with a wildcard
 - Remember that all comparables and comparators are consumers
 
@@ -365,18 +367,18 @@ Common names:
 - Varargs are a "leaky abstraction"; array is visible
 - Heap pollution occurs when a variable of a parameterized type refers to an object that is not of that type
 - It is unsafe to store a value in a generic varargs array parameter
-- The @SafeVarargs annotation constitutes a promise by the author of a method that it's typesafe
+- The `@SafeVarargs` annotation constitutes a promise by the author of a method that it's typesafe
 - Safe means the method doesn't store anything into the varargs array (overwrite) and doesn't allow an array reference to escape
 - It is unsafe to give another method access to a generic varargs parameter array (with two exceptions)
-- Use @SafeVarargs on every method with a varargs parameter of generic or parameterized type
-- Could also replace varargs parameter with List parameter
+- Use `@SafeVarargs` on every method with a varargs parameter of generic or parameterized type
+- Could also replace varargs parameter with `List` parameter
 
 #### 33. Consider typesafe heterogeneous containers
 
 - E.g. database rows have arbitrary number of columns
 - Parameterize the _key_ instead of the container, then present key to access container
 - When a class literal is passed among methods to communicate both compile-time and runtime type info, it's called a _type token_.
-- Recall "Favorites" example with a String, an int, and a class.
+- Recall "Favorites" example with a `String`, an `int`, and a `class`.
 - Also possible to use a _bounded type token_ using a bounded type parameter or bounded wildcard
 
 
