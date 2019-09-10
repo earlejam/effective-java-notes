@@ -1,13 +1,8 @@
 # effective-java-notes
 A collection of the major points made in the book Effective Java by Joshua Bloch (Third Edition). 
 
-Disclaimer: All content is taken from the book and should credited to Joshua Bloch and the references listed in the book.
+Disclaimer: All content is taken from the book and should credited to Joshua Bloch and the references he lists in the book.
 
-# TODO
-- Special formatting for code, method names, etc
-- Code formatting for items
-- Escape some angled brackets that aren't showing up
-- Fix escapes in code segments
 
 # Table of Contents
 #### [2. Creating and Destroying Objects](https://github.com/earlejam/effective-java-notes/blob/master/README.md#2-creating-and-destroying-objects-1)
@@ -109,7 +104,7 @@ Common names:
 
 # 3. Methods Common to All Objects
 
-#### 10. Obey the general contract when overriding equals
+#### 10. Obey the general contract when overriding `equals`
 
 - Don't override if:
   - each instance is inherently unique
@@ -130,20 +125,20 @@ Common names:
 - Always override `hashcode` when you override `equals`. Don't be too clever
 - Make sure the parameter is the `Object` type
 
-#### 11. Always override hashcode when you override equals
+#### 11. Always override `hashcode` when you override `equals`
 
 - Equal objects must have equal hashcodes
 - Do not be tempted to exclude significant fields from the `hashcode` computation to improve performance
 - Don't provide a detailed specification of the value returned by `hashcode`, so clients can't depend on it and you can change it
 
-#### 12. Always override toString
+#### 12. Always override `toString`
 
 - Makes your class more pleasant to use and makes systems using the class easier to debug
 - When practical, `toString` should return _all_ the interesting info contained in the object
 - Whether or not you decide to specify a format (and corresponding static factory for converting back) you should clearly document your intentions
 - Provide programmatic access to the info contained in the value returned by `toString` (e.g. accessors)
 
-#### 13. Override clone judiciously
+#### 13. Override `clone` judiciously
 
 - `Cloneable` interface means protected `clone` method on `Object` returns field-by-field copy of the object
 - A class implementing `Cloneable` is expected to provide a properly functioning, public clone method
@@ -158,7 +153,7 @@ Common names:
 - New interfaces should not extend `Cloneable`
 - Arrays are better with `clone`, everything else is better with copy constructors or factories
 
-#### 14. Consider implementing Comparable
+#### 14. Consider implementing `Comparable`
 
 - Should generally agree with equals
 - Use of `<` and `>` in `compareTo` methods is verbose, error-prone, and not recommended
@@ -303,13 +298,13 @@ Common names:
   
   | Term | Example |
   | ------| ------- |
-  | Parameterized Type | `List\<String>` |
+  | Parameterized Type | `List<String>` |
   | Actual Type Parameter | `String` |
   | Generic Type | `List<E>` |
   | Format Type Parameter | `E` |
   | Unbounded Wildcard Type | `List<?>` |
   | Raw Type | `List` |
-  | Bounded Type Parameter | `\<E extends Number>` |
+  | Bounded Type Parameter | `<E extends Number>` |
   | Recursive Type Bound | `<T extends Comparable<T>>` |
   | Bounded Wildcard Type | `List<? extends Number>` |
   | Generic Method | `static <E> List<E> asList(E[] a)` |
@@ -322,7 +317,7 @@ Common names:
 - Always use the `@SuppressWarnings` annotation on the smallest scope possible
 - Every time you use a `@SuppressWarnings("Unchecked")` annotation, add a comment saying why it is safe to do so
 
-#### 28. Prefer lists to arrays
+#### 28. Prefer `Lists` to arrays
 
 - Arrays are "deficient" since some type checks will fail at runtime instead of compile time
 - Arrays are _covariant_ whereas generics are _invariant_
@@ -386,7 +381,7 @@ Common names:
 
 # 6. Enums and Annotations
 
-#### 34. Use enums instead of int constants
+#### 34. Use enums instead of `int` constants
 
 - `int` constants have no type safety, little expressiveness
 - Brittle because if the actual values change, must be re-compiled by clients
@@ -402,11 +397,11 @@ Common names:
 
 - Never derive a value associated with an enum from its ordinal; store it in an instance field instead
 
-#### 36. Use EnumSet instead of bit fields
+#### 36. Use `EnumSet` instead of bit fields
 
 - Just because an enumerated type will be used in sets, there is no reason to represent it with bit fields
 
-#### 37. Use EnumMap instead of ordinal indexing
+#### 37. Use `EnumMap` instead of ordinal indexing
 
 - Most serious problem with ordinal indexing: your responsibility to use correct `int` value; ints do not provide the type safety of enums
 - Can use 3-parameter version of `Collectors.groupingBy` to specify `EnumMap` implementation if desired
@@ -428,7 +423,7 @@ Common names:
 - There is simply no reason to use naming patterns when you can add annotations instead
 - All programmers should use the predefined annotation types that Java provides
 
-#### 40. Consistently use the @Override annotation
+#### 40. Consistently use the `@Override` annotation
 
 - Use the `@Override` annotation on every method declaration that you believe to override a superclass declaration
 - Not required to annotate methods that you believe to override abstract method declarations in concrete classes
@@ -545,7 +540,7 @@ Common names:
 -_joining_: joins streams of character sequences (e.g. strings)
 - most important ones: `toList`, `toSet`, `toMap`, `groupingBy`, `joining`
 
-#### 47. Prefer Collection to Stream as a return type
+#### 47. Prefer `Collection` to `Stream` as a return type
 
 - Programmers cannot use for-each loops with streams because `Stream` does not extend `Iterable`
 - Can write an adapter to go from stream to iterable, and vice versa
@@ -624,7 +619,7 @@ Common names:
 - Do not preallocate an empty array in hopes of improving performance
 - Never return `null` in place of an empty array or collection
 
-#### 55. Return optionals judiciously
+#### 55. Return Optionals judiciously
 
 - The `Optional<T>` class represents an immutable container that can hold either a single non-null `T` reference or nothing at all
   - If the `Optional<T>` contains nothing, we call it _empty_
