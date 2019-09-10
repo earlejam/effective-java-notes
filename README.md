@@ -5,7 +5,9 @@ Disclaimer: All content is taken from the book and should credited to Joshua Blo
 
 # TODO
 - Special formatting for code, method names, etc
+- Code formatting for items
 - Escape some angled brackets that aren't showing up
+- Fix escapes in code segments
 
 # Table of Contents
 #### [2. Creating and Destroying Objects](https://github.com/earlejam/effective-java-notes/blob/master/README.md#2-creating-and-destroying-objects-1)
@@ -665,31 +667,31 @@ Common names:
 #### 58. Prefer for-each loops to traditional for-loops
 
 - 3 common situations where you can't use for-each:
-  1. Destructive filtering: use iterator & its remove method instead
-  2. Transforming: use list iterator or array index instead
-  3. Parallel iteration: use iterator or array index variable instead
+  1. Destructive filtering: use `Iterator` & its `remove` method instead
+  2. Transforming: use `Iterator` or array index instead
+  3. Parallel iteration: use `Iterator` or array index variable instead
 - For-each loop provides compelling advantages over traditional for-loop in clarity, flexibility, and bug prevention, with no performance penalty
 
 #### 59. Know and use the libraries
 
 - By using a standard library, you take advantage of the knowledge of the experts who wrote it and the experience of those who used it before you
-- The random number generator ThreadLocalRandom is now the top choice
+- The random number generator `ThreadLocalRandom` is now the top choice
 - Numerous features are added to libraries in every major release, and it pays to keep abreast of these additions
-- Every programmer should be familiar with the basics of java.lang, java.util, and java.io, and their subpackages; the others can be learned on a need-to-know basis
+- Every programmer should be familiar with the basics of `java.lang`, `java.util`, and `java.io`, and their subpackages; the others can be learned on a need-to-know basis
 
-#### 60. Avoid float and double if exact answers are required
+#### 60. Avoid `float` and `double` if exact answers are required
 
-- The float and double types are particularly ill-suited for monetary calculations
-- Instead, use BigDecimal, int, or long for monetary calculations
-- BigDecimal less convenient than using primitive, and a lot slower
+- The `float` and `double` types are particularly ill-suited for monetary calculations
+- Instead, use `BigDecimal`, `int`, or `long` for monetary calculations
+- `BigDecimal` less convenient than using primitive, and a lot slower
 
 #### 61. Prefer primitive types to boxed primitives
 
-- Applying the == operator to boxed primitives is almost always wrong
+- Applying the `==` operator to boxed primitives is almost always wrong
 - When you mix primitives and boxed primitives in an operation, the boxed primitive is auto-unboxed
 - Use boxed primitives as elements, keys, and values in collections, and for types in parameterized types or methods
 - Boxed primitives should be used for reflective method invocations
-- Autoboxing reduces verbosity, but not the danger of using boxed primitives; (auto) unboxing can cause a NullPointerException
+- Autoboxing reduces verbosity, but not the danger of using boxed primitives; (auto) unboxing can cause a `NullPointerException`
 
 #### 62. Avoid strings where other types are more appropriate
 
@@ -701,8 +703,8 @@ Common names:
 
 #### 63. Beware the performance of string concatenation
 
-- Using the string concatenation operator repeatedly to concatenate n strings requires time quadratic in n
-- To achieve acceptable performance, use a StringBuilder in place of a String
+- Using the string concatenation operator repeatedly to concatenate _n_ strings requires time quadratic in _n_
+- To achieve acceptable performance, use a `StringBuilder` in place of a `String`
 - Don't use the string concatenation operator to combine more than a few strings
 
 #### 64. Refer to objects by their interfaces
@@ -716,7 +718,7 @@ Common names:
 #### 65. Prefer interfaces to reflection
 
 - The _core reflection facility_ offers programmatic access to arbitrary classes
-- Given a Class object, you can obtain Constructor, Method, and Field instances representing the actual entities of the class
+- Given a Class object, you can obtain `Constructor`, `Method`, and `Field` instances representing the actual entities of the class
 - These let you manipulate their underlying counterparts reflectively: you can construct instances, invoke methods, and access fields of the underlying class
 - Reflection allows one class to use another, even if the latter class didn't exist when the former was compiled
 - Price of reflection:
@@ -752,7 +754,7 @@ Common names:
 - Consider the performance consequences of your API design decisions
 - It is a very bad idea to warp an API to achieve good performance
 - Measure performance before and after each attempted optimization
-- Profiling tools can help you decide where to focus your optimization efforts
+- Profiling tools can help you decide where to focus your optimization efforts (e.g. JMH benchmarking tool)
 
 #### 68. Adhere to generally accepted naming conventions
 
@@ -764,12 +766,12 @@ Common names:
 
   | Identifier Type | Examples |
   | --- | --- |
-  | Package or module | org.junit.jupiter.api, com.google.common.collect |
-  | Class or Interface | Stream, FutureTask, LinkedHashMap, HttpClient |
-  | Method or Field | remove, groupingBy, getCrc |
-  | Constant Field | MIN_VALUE, NEGATIVE_INFINITY |
-  | Local Variable | i, denom, houseNum |
-  | Type Parameter | T, E, K, V, X, R, U, V, T1, T2 |
+  | Package or module | `org.junit.jupiter.api`, `com.google.common.collect` |
+  | Class or Interface | `Stream`, `FutureTask`, `LinkedHashMap`, `HttpClient` |
+  | Method or Field | `remove`, `groupingBy`, `getCrc` |
+  | Constant Field | `MIN_VALUE`, `NEGATIVE_INFINITY` |
+  | Local Variable | `i`, `denom`, `houseNum` |
+  | Type Parameter | `T`, `E`, `K`, `V`, `X`, `R`, `U`, `V`, `T1`, `T2` |
 - Grammatical naming conventions are more flexible and more controversial than typographical conventions
 - Refer to the JLS for more examples
 
