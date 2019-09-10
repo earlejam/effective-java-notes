@@ -952,25 +952,25 @@ Common names:
 - Object Serialization is Java's framework for encoding objects as byte streams (_serializing_) and reconstructing objects from their encodings (_deserializing_)
 - A fundamental problem with serialization: its _attack surface_ is too big to protect and is constantly growing
 - Deserialization of untrusted streams can result in Remote Code Execution (RCE), Denial of Service (DoS) and a range of other exploits
-- Attackers can create gadget chains powerful enough to execute arbitrary code
-- Deserialization bombs can cause DoS
+- Attackers can create _gadget chains_ powerful enough to execute arbitrary code
+- _Deserialization bombs_ can be used to perform DoS
 - The best way to avoid serialization exploits is never to deserialize anything
 - There is no reason to use Java serialization in any new system you write
 - The leading cross-platform structured data representations are JSON and Protocol Buffers (a.k.a _protobuf_)
   - JSON is text-based and human readable
   - protobuf is binary and substantially more efficient
 - Never deserialize untrusted data
-- Prefer whitelisting to blacklisting when deciding what to deserialize, since blacklists only work against known threats
+- Prefer whitelisting to blacklisting when deciding what to deserialize, since blacklists only work against _known_ threats
 
 #### 86. Implement Serializable with great caution
 
-- A major cost of implementing Serializable is that it decreases the flexibility to change a class's implementation once it has been released
-- When a class implements Serializable, its byte-stream encoding becomes part of its exported API
+- A major cost of implementing `Serializable` is that it decreases the flexibility to change a class's implementation once it has been released
+- When a class implements `Serializable`, its byte-stream encoding becomes part of its exported API
 - If you accept the default serialized form and later change a class's internal representation, an incompatible change in the serialized form will result
-- A second cost of implementing Serializable is that it increases the likelihood of bugs and security holes
-- A third cost of implementing Serializable is that it increases the testing burden associated with releasing a new version of the class
-- Implementing Serializable is not a decision to be undertaken lightly
-- Classes designed for inheritance should rarely implement Serializable, and interfaces should rarely extend it
+- A second cost of implementing `Serializable` is that it increases the likelihood of bugs and security holes
+- A third cost of implementing `Serializable` is that it increases the testing burden associated with releasing a new version of the class
+- Implementing `Serializable` is not a decision to be undertaken lightly
+- Classes designed for inheritance should rarely implement `Serializable`, and interfaces should rarely extend it
 - Extendable and serializable classes should beware of _finalizer attacks_ from subclasses
 - Inner classes should not implement Serializable
 
@@ -978,35 +978,35 @@ Common names:
 
 - When you are writing a class under time pressure, it is generally appropriate to concentrate your efforts on designing the best API; this might mean releasing a "throwaway" implementation to be replaced later, but accepting the default serialized form can mean you're stuck with an implementation forever
 - Do not accept the default serialized form without first considering whether it is appropriate
-- The default serialized form is likely to be appropriate if an object's physical representation is identical to its logical content (e.g. FullName class)
-- Even if you decide that the default serialized form is appropriate, you often must provide a readObject method to ensure invariants and security
-- Using the default serialized form when an object's physical representation differs substantially from the logical data content (e.g. StringList class) has four disadvantages:
+- The default serialized form is likely to be appropriate if an object's physical representation is identical to its logical content (e.g. `FullName` class)
+- Even if you decide that the default serialized form is appropriate, you often must provide a `readObject` method to ensure invariants and security
+- Using the default serialized form when an object's physical representation differs substantially from the logical data content (e.g. `StringList` class) has four disadvantages:
   1. It permanently ties the exported API to the current internal representation
   2. It can consume excessive space
   3. It can consume excessive time
   4. It can cause stack overflows
-- The 'transient' modifier indicates that an instance field is able to be omitted from a class's default serialized form
-- Every instance field that can be declared transient should be
+- The `transient` modifier indicates that an instance field is able to be omitted from a class's default serialized form
+- Every instance field that can be declared `transient` should be
 - Before deciding to make a field nontransient, convince yourself that its value is part of the logical state of the object
 - You must impose any synchronization on object serialization that you would impose on any other method that reads the entire state of the object
 - Regardless of what serialized form you choose, declare an explicit serial version UID in every serializable class you write
 - Do not change the serial version UID unless you want to break compatibility with all existing serialized instances of a class
 
-#### 88. Write readObject methods defensively
+#### 88. Write `readObject` methods defensively
 
-- The readObject method is effectively another public constructor, and demands all the same care
-- readObject must also check its parameters for validity and make defensive copies of parameters where appropriate
+- The `readObject` method is effectively another public constructor, and demands all the same care
+- `readObject` must also check its parameters for validity and make defensive copies of parameters where appropriate
 - When an object is deserialized, it is critical to defensively copy any field containing an object reference that a client must not possess
-- Every serializable immutable class containing private mutable components must defensively copy these components in its readObject method
-- Like a constructor, a readObject method must not invoke an overridable method, directly or indirectly
-- Check any invariants and throw an InvalidObjectException if a check fails; these checks should follow any defensive copying
+- Every serializable immutable class containing private mutable components must defensively copy these components in its `readObject` method
+- Like a constructor, a `readObject` method must not invoke an overridable method, directly or indirectly
+- Check any invariants and throw an `InvalidObjectException` if a check fails; these checks should follow any defensive copying
 
-#### 89. For instance control, prefer enum types to readResolve
+#### 89. For instance control, prefer enum types to `readResolve`
 
-- The readResolve feature allows you to substitute another instance for the one created by readObject
-- readResolve can be used to maintain the singleton property for a class
-- If you depend on readResolve for instance control, all instance fields with object reference types _must_ be declared transient; otherwise it is possible for a determined attacker to secure a reference to the deserialized object before its readResolve method is run
-- The accessibility of readResolve is significant (private, package-private, etc)
+- The `readResolve` feature allows you to substitute another instance for the one created by `readObject`
+- `readResolve` can be used to maintain the singleton property for a class
+- If you depend on `readResolve` for instance control, all instance fields with object reference types _must_ be declared `transient`; otherwise it is possible for a determined attacker to secure a reference to the deserialized object before its `readResolve` method is run
+- The _accessibility_ of `readResolve` is significant (private, package-private, etc)
 - Use enum types to enforce instance control invariants wherever possible
 
 #### 90. Consider serialization proxies instead of serialized instances
@@ -1015,12 +1015,12 @@ Common names:
 - First, design a private static nested class that concisely represents the logical state of an instance of the enclosing class
   - This is known as the _Serialization Proxy_ of the enclosing class; it should have a single constructor whose parameter type is that of the enclosing class
   - The constructor merely copies the data from its argument, it need not do any consistency checking or defensive copying
-- Both the enclosing class and its serialization proxy must be declared to implement Serializable
-- Next, add a writeReplace method on the enclosing class that creates a SerializationProxy instance with the aforementioned constructor
-- Add a readObject method to the enclosing class that throws an InvalidObjectException with a message saying the Proxy is required
-- Finally, provide a readResolve method on the SerializationProxy class to return a logically equivalent instance of the enclosing class
-- This readResolve method creates an instance of the enclosing class using only its public API and therein lies the beauty of the pattern; it largely eliminates the extralinguistic character of serialization, freeing you from having to separately ensure that deserialized instances obey the class's invariants
-- The serialization proxy pattern allows the deserialized instance to have a different class than the originally serialized instance (think RegularEnumSet vs JumboEnumSet)
+- Both the enclosing class and its serialization proxy must be declared to implement `Serializable`
+- Next, add a `writeReplace` method on the enclosing class that creates a `SerializationProxy` instance with the aforementioned constructor
+- Add a `readObject` method to the enclosing class that throws an `InvalidObjectException` with a message saying the Proxy is required
+- Finally, provide a `readResolve` method on the `SerializationProxy` class to return a logically equivalent instance of the enclosing class
+- This `readResolve` method creates an instance of the enclosing class using only its public API and therein lies the beauty of the pattern; it largely eliminates the extralinguistic character of serialization, freeing you from having to separately ensure that deserialized instances obey the class's invariants
+- The serialization proxy pattern allows the deserialized instance to have a different class than the originally serialized instance (think `RegularEnumSet` vs `JumboEnumSet`)
 - Two limitations of the serialization proxy pattern:
   1. It is not compatible with classes that are extendable by their users
   2. It is not compatible with some classes whose object graphs contain circularities
