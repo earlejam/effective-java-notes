@@ -466,8 +466,8 @@ Common names:
 #### 43. Prefer method references to lambdas
 
 - Multiset with lambda vs method reference:
-  - lambda: map.merge(key, 1, (count, incr) -> count + incr);
-  - method reference: map.merge(key, 1, Integer::sum);
+  - lambda: `map.merge(key, 1, (count, incr) -> count + incr);`
+  - method reference: `map.merge(key, 1, Integer::sum);`
 - Method reference reduces visual clutter
 - Sometimes lambda parameters are useful documentation
   - Consider them especially with large class names or if method lies within same class as lambda
@@ -475,11 +475,11 @@ Common names:
 
 | Method Reference Type | Example | Lambda Equivalent |
 | --- | --- | --- |
-| Static | Integer::parseInt | str -> Integer.parseInt(str) |
-| Bound | Instant.now()::isAfter | Instant then = Instant.now(); t -> then.isAfter(t); |
-| Unbound | String::toLowerCase | str -> str.toLowerCase() |
-| Class constructor | TreeMap<K,V>::new | () -> new TreeMap<K,V> |
-| Array constructor | int[]::new | len -> new int[len] |
+| Static | `Integer::parseInt` | `str -> Integer.parseInt(str)` |
+| Bound | `Instant.now()::isAfter` | `Instant then = Instant.now(); t -> then.isAfter(t);` |
+| Unbound | `String::toLowerCase` | `str -> str.toLowerCase()` |
+| Class constructor | `TreeMap<K,V>::new` | `() -> new TreeMap<K,V>` |
+| Array constructor | `int[]::new` | `len -> new int[len]` |
 - Where method references are shorter and clearer, use them; where they aren't, stick with lambdas
 
 #### 44. Favor the use of standard functional interfaces
@@ -487,34 +487,34 @@ Common names:
 - Now that Java has lambdas, you'll be writing more constructors and methods that take function objects as parameters
 - If one of the standard functional interfaces does the job, you should generally use it in preference to a purpose-built functional interface
 - Basic functional interfaces:
-  1. Operator: function whose result and argument types are the same (UnaryOperator and BinaryOperator)
-  2. Predicate: function that takes an argument and returns a boolean
-  3. Function: argument and return types differ
-  4. Supplier: function that takes no arguments and returns (supplies) a value
-  5. Consumer: function that takes an argument but returns nothing
+  1. `Operator`: function whose result and argument types are the same (`UnaryOperator` and `BinaryOperator`)
+  2. `Predicate`: function that takes an argument and returns a boolean
+  3. `Function`: argument and return types differ
+  4. `Supplier`: function that takes no arguments and returns (supplies) a value
+  5. `Consumer`: function that takes an argument but returns nothing
 - 6 basic functional interfaces:
 
 | Interface | Function Signature | Example |
 | --- | --- | --- |
-| UnaryOperator<T> | T apply(T t) | String::toLowerCase |
-| BinaryOperator<T> | T apply(T t1, T t2) | BigInteger::add |
-| Predicate<T> | boolean test(T t) | Collection::isEmpty |
-| Function<T, R> | R apply(T t) | Arrays::asList |
-| Supplier<T> | T get() | Instant::now |
-| Consumer<T> | void accept(T t) | System.out::println |
+| `UnaryOperator<T>` | `T apply(T t)` | `String::toLowerCase` |
+| `BinaryOperator<T>` | `T apply(T t1, T t2)` | `BigInteger::add` |
+| `Predicate<T>` | `boolean test(T t)` | `Collection::isEmpty` |
+| `Function<T, R>` | `R apply(T t)` | `Arrays::asList` |
+| `Supplier<T>` | `T get()` | `Instant::now` |
+| `Consumer<T>` | `void accept(T t)` | `System.out::println` |
 - Don't be tempted to use basic functional interfaces with boxes primitives instead of primitive functional interfaces
-- Seriously consider writing a purpose-built functional interface if you need one that shares one of the following with Comparator:
+- Seriously consider writing a purpose-built functional interface if you need one that shares one of the following with `Comparator`:
    - It will be commonly used and could benefit from a descriptive name
    - It has a strong contract associated with it
    - It would benefit from custom default methods
-- Always annotate your functional interfaces with the @FunctionalInterface annotation
+- Always annotate your functional interfaces with the `@FunctionalInterface` annotation
   - Tells readers that the interface was designed to enable lambdas
   - Keeps you honest because interface won't compile unless it has exactly one abstract method
   - Prevents maintainers from accidentally adding abstract methods
 
 #### 45. Use streams judiciously
 
-- Stream: a finite or infinite sequence of elements
+- `Stream`: a finite or infinite sequence of elements
 - Stream pipeline: multistage computation on these elements
   - Source stream -> 1+ intermediate operations -> 1 terminal operation
 - Stream pipelines are evaluated lazily
@@ -522,7 +522,7 @@ Common names:
 - Overusing streams makes programs hard to read and maintain
 - In the absence of explicit types, careful naming of lambda parameters is essential to the readability of stream pipelines
 - Using helper methods is even more important for readability in stream pipelines than in iterative code
-- Refrain from using streams to process char values
+- Refrain from using streams to process `char` values
 - Refactor existing code to use streams and use them in new code only where it makes sense to do so
 - It's hard to access corresponding elements from multiple stages of a pipeline simultaneously with streams; when applicable, try inverting the mapping when you need access to the earlier-stage value
 - Name streams the plural noun describing the elements of the stream
@@ -530,37 +530,37 @@ Common names:
 
 #### 46. Prefer side-effect-free functions in streams
 
-- Streams paradigm: want result of each stage as close as possible to 'pure function' of the result of the previous stage
+- Streams paradigm: want result of each stage as close as possible to _pure function_ of the result of the previous stage
   - Pure functions' results only depend on input, no other state
-- A foreach operation that does anything more than present the result of the computation performed by the stream is a "bad smell"
+- A `foreach` operation that does anything more than present the result of the computation performed by the stream is a "bad smell"
 - The foreach operation should be used only to report the result of a stream computation, not to perform the computation
 - _Collector_: an opaque object that encapsulates a reduction strategy (combining elements of the stream into a single object)
-- It is customary and wise to statically import all members of Collectors because it makes stream pipelines more readable
+- It is customary and wise to statically import all members of `Collectors` because it makes stream pipelines more readable
 - _groupingBy_: returns collectors to produce maps that group elements into categories based on a classifier function
 - _downstream collector_: produces a value from a stream containing all the elements in a category
-- There is never a reason to say collect(counting())
-- _minBy/maxBy_: take a comparator and return the minimum or maximum element in the stream (determined by Comparator)
+- There is never a reason to say `collect(counting())`
+- _minBy/maxBy_: take a comparator and return the minimum or maximum element in the stream (determined by `Comparator`)
 -_joining_: joins streams of character sequences (e.g. strings)
-- most important ones: toList, toSet, toMap, groupingBy, joining
+- most important ones: `toList`, `toSet`, `toMap`, `groupingBy`, `joining`
 
 #### 47. Prefer Collection to Stream as a return type
 
-- Programmers cannot use for-each loops with streams because Stream does not extend Iterable
+- Programmers cannot use for-each loops with streams because `Stream` does not extend `Iterable`
 - Can write an adapter to go from stream to iterable, and vice versa
-- Collections provide both iteration and stream access. So, Collection or an appropriate subtype is generally the best return type for a public, sequence-returning method
+- Collections provide both iteration and stream access. So, `Collection` or an appropriate subtype is generally the best return type for a public, sequence-returning method
 - Do not store a large sequence in memory just to return it as a collection
 
 #### 48. Use caution when making streams parallel
 
-- Parallelizing a pipeline is unlikely to increase its performance if the source is from Stream.iterate or the intermediate operation 'limit' is used
+- Parallelizing a pipeline is unlikely to increase its performance if the source is from `Stream.iterate` or the intermediate operation `limit` is used
 - Do not parallelize stream pipelines indiscriminately
-- Performance gains from parallelism are best on streams over ArrayList, HashMap, HashSet, and ConcurrentHashMap instances; arrays; int ranges; and long ranges
-  - This is because all of these can be easily split into ranges by a 'spliterator'
+- Performance gains from parallelism are best on streams over `ArrayList`, `HashMap`, `HashSet`, and `ConcurrentHashMap` instances; arrays; `int` ranges; and `long` ranges
+  - This is because all of these can be easily split into ranges by a `spliterator`
   - All provide at least good locality of reference
 - Parallelizing a pipeline will do little if a lot of work is done in the terminator and that work is inherently sequential
   - The best candidates for parallelism are reductions and short-circuiting operations
 - Not only can parallelizing a stream lead to poor performance, including liveness failures; it can lead to incorrect results and unpredictable behavior (safety failures)
-- Under the right circumstances, it _is_ possible to achieve near-linear speedup in the number of processor cores simply by adding a 'parallel' call to a stream pipeline
+- Under the right circumstances, it _is_ possible to achieve near-linear speedup in the number of processor cores simply by adding a `parallel` call to a stream pipeline
 
 
 # 8. Methods
