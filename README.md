@@ -782,23 +782,23 @@ Common names:
 
 - Exceptions are, as their name implies, to be used only for exceptional conditions; they should never be used for ordinary control flow
 - A well-designed API must not force its clients to use exceptions for ordinary control flow
-- State-depending methods should have a separate state-testing method (e.g. next() and hasNext() for iterators) OR return an empty optional or a distinguished value
+- State-depending methods should have a separate state-testing method (e.g. `next()` and `hasNext()` for iterators) OR return an empty `Optional` or a distinguished value
 
 #### 70. Use checked exceptions for recoverable conditions and runtime exceptions for programming errors
 
 - Use checked exceptions for conditions from which the caller can reasonably be expected to recover
 - By confronting the user with a checked exception, the API designer presents a mandate to recover from the condition
 - Use runtime exceptions to indicate programming errors
-- The great majority of runtime exceptions indicate precondition violations
-- All of the unchecked throwables you implement should subclass RuntimeException
-- Parsing the string representation of an exception to ferret out additional information is extremely bad practice; it is nonportable and fragile
+- The great majority of runtime exceptions indicate _precondition_ violations
+- All of the unchecked throwables you implement should subclass `RuntimeException`
+- Parsing the `String` representation of an exception to ferret out additional information is extremely bad practice; it is nonportable and fragile
 - Provide methods on your checked exceptions to aid in recovery
 
 #### 71. Avoid unnecessary use of checked exceptions
 
 - Unlike return codes and unchecked exceptions, these force programmers to deal with problems, enhancing reliability
 - The burden is justified if the exceptional condition cannot be prevented by proper use of the API _and_ the programmer using the API can take some useful action once confronted with the exception
-- The easiest way to eliminate a checked exception is to return an optional of the desired result type
+- The easiest way to eliminate a checked exception is to return an `Optional` of the desired result type
 - When used sparingly, checked exceptions can increase the reliability of programs; when overused, they make APIs painful to use
 
 #### 72. Favor the use of standard exceptions
@@ -808,23 +808,23 @@ Common names:
   1) Makes API easier to learn because it matches established conventions
   2) Programs using your API are easier to read because they're not cluttered with unfamiliar exceptions
   3) Smaller memory footprint
-- Do _not_ reuse Exception, RuntimeException, Throwable, or Error directly
+- Do _not_ reuse `Exception`, `RuntimeException`, `Throwable`, or `Error` directly
 - Common Exceptions Use Cases:
 
   | Exception | Occasion for use |
   | --- | --- |
-  | IllegalArgumentException | Non-null parameter value is inappropriate |
-  | IllegalStateException | Object state is inappropriate for method invocation |
-  | NullPointerException | Parameter value is null where prohibited |
-  | IndexOutOfBoundsException | Index parameter value is out of range |
-  | ConcurrentModificationException | Concurrent modification of an object has been detected where prohibited |
-  | UnsupportedOperationException | Object does not support method |
-- Throw IllegalStateException if no argument values would have worked, otherwise throw IllegalArgumentException
+  | `IllegalArgumentException` | Non-null parameter value is inappropriate |
+  | `IllegalStateException` | Object state is inappropriate for method invocation |
+  | `NullPointerException` | Parameter value is `null` where prohibited |
+  | `IndexOutOfBoundsException` | Index parameter value is out of range |
+  | `ConcurrentModificationException` | Concurrent modification of an object has been detected where prohibited |
+  | `UnsupportedOperationException` | Object does not support method |
+- Throw `IllegalStateException` if no argument values would have worked, otherwise throw `IllegalArgumentException`
 
 #### 73. Throw exceptions appropriate to the abstraction
 
 - Higher layers should catch lower-level exceptions and, in their place, throw exceptions that can be explained in terms of the higher-level abstraction; this is known as _Exception translation_
-- _Exception chaining_ is called for when the lower-level exception might be helpful to someone debugging the problem that caused the higher-level exception; lower-level exception passed to high-level one as "cause"
+- _Exception chaining_ is called for when the lower-level exception might be helpful to someone debugging the problem that caused the higher-level exception; lower-level exception passed to high-level one as the _cause_
 - While exception translation is superior to mindless propagation of exceptions from lower layers, it should not be overused
 
 #### 74. Document all exceptions thrown by each method
@@ -832,8 +832,8 @@ Common names:
 - Always declare checked exceptions individually, and document precisely the conditions under which each one is thrown
 - Familiarizing programmers with all of the errors they can make helps them avoid making these errors
 - The unchecked exceptions of an interface form part of the interface's _general contract_ and enables common behavior among multiple implementations
-- Use the Javadoc @throws tag to document each exception that a method can throw, but do NOT use the 'throws' keyword on unchecked exceptions; this helps programmers separate the two
-- If an exception is thrown by many methods in a class for the same reason, you can document the exception in the class's documentation comment (e.g. NullPointerException)
+- Use the Javadoc `@throws` tag to document each exception that a method can throw, but do NOT use the `throws` keyword on unchecked exceptions; this helps programmers separate the two
+- If an exception is thrown by many methods in a class for the same reason, you can document the exception in the class's documentation comment (e.g. `NullPointerException`)
 
 #### 75. Include failure-capture information in detail messages
 
@@ -848,13 +848,13 @@ Common names:
 - If an object is immutable, failure atomicity is free
 - For methods with mutable objects, check validity of parameters before making any changes
 - Another approach: perform the operation on a temporary copy of the object and replace the contents once the operation is complete
-- Far less common: write "recovery code" to intercept failures and roll back (mostly for durable data structures)
+- Far less common: write recovery code to intercept failures and roll back (mostly for _durable_ data structures)
 - If this rule is violated, the API documentation should clearly indicate what state the object will be left in
 
 #### 77. Don't ignore exceptions
 
-- An empty catch block defeats the purpose of exceptions
-- If you choose to ignore an exception, the catch block should contain a comment explaining why it is appropriate to do so, and the variable should be named 'ignored'.
+- An empty `catch` block defeats the purpose of exceptions
+- If you choose to ignore an exception, the `catch` block should contain a comment explaining why it is appropriate to do so, and the variable should be named `ignored`.
 
 # 11. Concurrency
 
